@@ -1,0 +1,456 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><meta name="generator" content="Astro v6.4.2"><title>UbuntuにNginxコンテナを立ててHTTPSに対応する</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-YXXZ5YDX62"></script><script>(function(){const gaId = "G-YXXZ5YDX62";
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        })();</script><!-- フラッシュ防止: レンダリング前にテーマ・言語を適用 --><script>
+      const theme = localStorage.getItem('theme') ??
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const systemLang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+      document.documentElement.dataset.lang = localStorage.getItem('lang') ?? systemLang;
+    </script><link rel="stylesheet" href="/_astro/Footer.tb1svRbc.css"></head> <body>  <header class="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50"> <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between"> <div class="flex items-center gap-2"> <a href="/" class="font-black text-xl tracking-tight leading-none h-8 flex items-center hover:opacity-80 transition-opacity"> yasakura </a> <a href="/about" class="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
+About
+</a> </div> <div class="flex items-center gap-2"> <button id="search-btn" aria-label="検索" class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </button> <button id="theme-toggle" aria-label="テーマを切り替える" class="flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"> <!-- 太陽: ライトモード時に表示 --> <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path> </svg> <!-- 月: ダークモード時に表示 --> <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path> </svg> </button> <script type="module">const o=document.getElementById("theme-toggle"),c=document.getElementById("icon-sun"),s=document.getElementById("icon-moon");function n(e){const t=e==="dark";document.documentElement.classList.toggle("dark",t),c?.classList.toggle("hidden",!t),s?.classList.toggle("hidden",t)}const d=document.documentElement.classList.contains("dark")?"dark":"light";n(d);o?.addEventListener("click",()=>{const e=document.documentElement.classList.contains("dark")?"light":"dark";localStorage.setItem("theme",e),n(e)});window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{localStorage.getItem("theme")||n(e.matches?"dark":"light")});</script> <button id="lang-toggle" aria-label="言語切り替え" class="flex items-center gap-1 h-8 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-xs font-bold tabular-nums"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path> </svg> <span id="lang-label">JP</span> </button> </div> </div> </header> <script type="module">document.getElementById("search-btn")?.addEventListener("click",()=>{document.dispatchEvent(new CustomEvent("open-search"))});const n=document.getElementById("lang-toggle"),t=document.getElementById("lang-label");function a(e){document.documentElement.dataset.lang=e,t&&(t.textContent=e==="en"?"EN":"JP")}document.querySelector(".lang-ja, .lang-en")||n?.classList.add("hidden");a(document.documentElement.dataset.lang??"ja");n?.addEventListener("click",()=>{const e=document.documentElement.dataset.lang==="en"?"ja":"en";localStorage.setItem("lang",e),a(e)});</script> <main> <!-- パンくず --> <div class="max-w-5xl mx-auto px-6 pt-10"> <nav aria-label="パンくずリスト"> <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground list-none m-0 p-0"> <li class="flex items-center gap-1">  <a href="/" class="hover:text-foreground transition-colors"> Home </a> </li><li class="flex items-center gap-1"> <span aria-hidden="true">/</span> <span class="text-foreground"> UbuntuにNginxコンテナを立ててHTTPSに対応する </span> </li> </ol> </nav> </div> <!-- タイトル: 全幅 --> <header class="mt-8 py-12"> <div class="max-w-5xl mx-auto px-6"> <!-- 日付: 左寄せ・タイトル上 --> <div class="flex justify-center items-center gap-x-5 text-sm text-muted-foreground mb-3"> <time datetime="2020-08-13T00:00:00.000Z"> 2020/08/13 </time>  </div> <!-- タイトル: 中央寄せ --> <h1 class="text-4xl font-bold leading-tight my-6 text-center"> UbuntuにNginxコンテナを立ててHTTPSに対応する </h1> <!-- X アカウント --> <div class="flex justify-center mt-4"> <a href="https://x.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg>
+@yasakurara </a> </div> <!-- GitHub アカウント --> <div class="flex justify-center mt-2"> <a href="https://github.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+@yasakurara </a> </div> <!-- タグ: 中央寄せ・タイトル下 -->  </div> </header> <!-- 本文エリア --> <div class="max-w-5xl mx-auto px-6 py-10"> <div class="flex gap-12"> <!-- 中: 記事本文 --> <div class="flex-1 min-w-0"> <article id="article-body"> <!-- 本文 --> <div class="prose prose-zinc dark:prose-invert max-w-none
+            prose-headings:scroll-mt-24
+            prose-h1:mt-10 [&_h1:first-of-type]:mt-0
+            prose-a:text-foreground prose-a:underline-offset-4
+            prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+            prose-pre:rounded-lg prose-pre:border prose-pre:border-border prose-pre:overflow-x-auto
+            [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit
+          ">  <h1 id="モチベーション">モチベーション</h1>
+<ul>
+<li>まっさらなUbuntuにNginxコンテナを立てて，それをWEBサーバーとして運用したい．</li>
+<li>Let’s encryptでHTTPSに対応したい．</li>
+</ul>
+<h1 id="前準備">前準備</h1>
+<ul>
+<li>UbuntuがインストールされたAmazon EC2やAmazon Lightsail，GCP Compute Engine, VPSや物理サーバなどを用意し，グローバルなIPアドレスを設定しておく．</li>
+<li>ドメインを取得し，UbuntuサーバーのIPアドレスと関連付けておく．</li>
+</ul>
+<h1 id="パッケージをアップデートする">パッケージをアップデートする</h1>
+<ol>
+<li>
+<p><code>apt update</code>でパッケージ一覧を更新</p>
+</li>
+<li>
+<p><code>apt upgrade</code>でパッケージを更新</p>
+</li>
+<li>
+<p><code>apt autoremove</code>で必要なくなったパッケージを削除</p>
+</li>
+<li>
+<p><code>apt autoclean</code>で.debファイルを削除</p>
+<ul>
+<li><code>/var/log/apt/history.log</code>にaptコマンドの履歴がある</li>
+<li><code>/var/log/apt/term.log</code>にaptコマンドのログがある</li>
+</ul>
+</li>
+</ol>
+<h1 id="パッケージの自動アップデートを設定する">パッケージの自動アップデートを設定する</h1>
+<p>セキュリティ対策のため，パッケージは常に最新になるようにする．</p>
+<ol>
+<li>
+<p>20-auto-upgradesを編集する<br>
+<code>vi /etc/apt/apt.conf.d/20auto-upgrades</code></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>APT::Periodic::Update-Package-Lists "1";</span></span>
+<span class="line"><span>APT::Periodic::Download-Upgradeable-Packages "1";</span></span>
+<span class="line"><span>APT::Periodic::AutocleanInterval "7";</span></span>
+<span class="line"><span>APT::Periodic::Unattended-Upgrade "1";</span></span></code></pre>
+<ul>
+<li>Update-Package-Lists : アップデートの確認頻度[Day]</li>
+<li>Download-Upgradeable-Packages : アップデートをダウンロードしておくか</li>
+<li>AutocleanInterval : クリーンアップ頻度[Day]</li>
+<li>Unattended-Upgrade : アップデートをインストールするか</li>
+</ul>
+</li>
+<li>
+<p>50unattended-upgradesを編集する。セキュリティアップデートは自動化を推奨するが、他の自動アップデートはバージョンの不整合などで意図せず動かなくなる場合があるので注意。
+<code>vi /etc/apt/apt.conf.d/50unattended-upgrades</code></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>"${distro_id}:${distro_codename}-updates"; をコメントアウト</span></span></code></pre>
+</li>
+<li>
+<p>20-auto-upgradesを適用する<br>
+<code>dpkg-reconfigure -plow unattended-upgrades</code></p>
+</li>
+<li>
+<p>自動アップデートのサービスがactiveかを確認<br>
+<code>systemctl status unattended-upgrades.service</code></p>
+</li>
+<li>
+<p>テストする<br>
+<code>unattended-upgrade --dry-run --debug</code></p>
+</li>
+</ol>
+<h1 id="一般ユーザを新規追加してsudoが使えるようにしておく">一般ユーザを新規追加してsudoが使えるようにしておく</h1>
+<ol>
+<li><code>adduser &#x3C;user></code></li>
+<li><code>gpasswd -a &#x3C;user> sudo</code></li>
+</ol>
+<h1 id="一般ユーザでサーバーにsshできるようにする">一般ユーザでサーバーにSSHできるようにする</h1>
+<h2 id="ローカルで公開鍵を生成する">ローカルで公開鍵を生成する</h2>
+<p>以下はmacbookをローカルとした場合の手順</p>
+<ol>
+<li>
+<p><code>cd ~/.ssh</code></p>
+</li>
+<li>
+<p><code>ssh-keygen -t ed25519</code></p>
+</li>
+<li>
+<p><code>chmod 600 &#x3C;秘密鍵></code></p>
+</li>
+<li>
+<p><code>vi config</code></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Host &#x3C;nickname></span></span>
+<span class="line"><span>HostName &#x3C;ip address></span></span>
+<span class="line"><span>Port &#x3C;port for ssh></span></span>
+<span class="line"><span>User &#x3C;username></span></span>
+<span class="line"><span>IdentityFile ~/.ssh/&#x3C;秘密鍵></span></span></code></pre>
+</li>
+<li>
+<p><code>cat &#x3C; ~/.ssh/&#x3C;公開鍵> | pbcopy</code></p>
+</li>
+</ol>
+<h2 id="サーバーに公開鍵を登録する">サーバーに公開鍵を登録する</h2>
+<ol>
+<li>
+<p><code>su &#x3C;user></code></p>
+</li>
+<li>
+<p><code>mkdir ~/.ssh</code></p>
+</li>
+<li>
+<p><code>chmod 700 .ssh</code></p>
+</li>
+<li>
+<p><code>chown -R &#x3C;user>:&#x3C;group> /home/&#x3C;user>/.ssh</code></p>
+</li>
+<li>
+<p><code>~/.ssh/authorized_keys</code>に公開鍵をコピペ</p>
+</li>
+<li>
+<p><code>chmod 600 authorized_keys</code></p>
+</li>
+<li>
+<p><code>cd /etc/ssh</code></p>
+</li>
+<li>
+<p><code>sudo cp sshd_config sshd_config.bk</code></p>
+</li>
+<li>
+<p><code>sshd_config</code>を編集する</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Port &#x3C;port for ssh> &#x3C;== 22番以外にしたほうが良い</span></span>
+<span class="line"><span>PermitRootLogin no</span></span>
+<span class="line"><span>PasswordAuthentication no</span></span>
+<span class="line"><span>PubkeyAuthentication yes</span></span>
+<span class="line"><span>UsePAM no</span></span>
+<span class="line"><span>ServerAliveInterval 300</span></span>
+<span class="line"><span>TCPKeepAlive yes</span></span></code></pre>
+</li>
+<li>
+<p><code>/etc/ssh/sshd_config.d/</code> に追加の設定がある場合があり、それらが上書きする場合があるので注意。prefixの数字を若いものにしてカスタムの設定を作成し、それらを上書きする必要があるかも。</p>
+</li>
+<li>
+<p><code>sudo systemctl enable ssh</code></p>
+</li>
+<li>
+<p><code>sudo systemctl restart ssh</code></p>
+</li>
+<li>
+<p>ローカルからサーバにsshできることを確認。</p>
+</li>
+<li>
+<p><code>rm &#x3C;公開鍵></code></p>
+</li>
+</ol>
+<h1 id="firewallを設定する">Firewallを設定する</h1>
+<ol>
+<li><code>sudo ufw reset</code></li>
+<li><code>sudo ufw default DENY</code>で全パケットを拒否する設定にする</li>
+<li><code>sudo ufw allow &#x3C;port for ssh></code>でSSHのポートは許可しておく</li>
+<li><code>sudo ufw enable</code>でファイアウォールを有効化</li>
+<li><code>sudo ufw status verbose</code>で状態を確認</li>
+</ol>
+<ul>
+<li>ufwのログは<code>/var/log/ufw.log</code>に出力される</li>
+<li>設定したルールを削除したいなら
+<ul>
+<li><code>sudo ufw status numbered</code></li>
+<li><code>sudo ufw delete &#x3C;消したい番号></code></li>
+</ul>
+</li>
+</ul>
+<h1 id="podmanをインストールする">Podmanをインストールする</h1>
+<ol>
+<li><code>cat /etc/lsb-release</code>でUbuntuのバージョンを確認する．</li>
+<li><code>sudo apt update</code></li>
+<li><code>sudo apt install -y podman podman-compose</code></li>
+<li><code>sudo loginctl enable-linger $USER</code></li>
+<li><code>podman --version</code></li>
+<li>インストール直後のみ <code>podman machine init</code> を実行してVMを作成する</li>
+<li><code>podman machine start</code></li>
+<li><code>podman info</code></li>
+<li><code>podman run hello-world</code></li>
+<li>rootlessだと1024番未満のportをbindすることができない．<code>/etc/sysctl.conf</code> または <code>/etc/sysctl.d/99-unprivileged-ports.conf</code> に<code>net.ipv4.ip_unprivileged_port_start=0</code>を追加して<code>sudo sysctl --system</code>を実行することで，1024番未満のportをbindできるようになる．
+<ul>
+<li>一時的に適用するなら、<code>sudo sysctl net.ipv4.ip_unprivileged_port_start=80</code></li>
+</ul>
+</li>
+<li><code>podman run -d --name nginx -p 80:80 --network pasta docker.io/library/nginx</code>
+<ul>
+<li>slirp4netns ではなく passt/pasta を使うことで、アクセス元のクライアントIPアドレスをコンテナ内でも取得できるようにする。</li>
+</ul>
+</li>
+<li><code>podman logs -f nginx</code></li>
+</ol>
+<h1 id="nginxコンテナを立ち上げてhttpでアクセスできることを確認する">Nginxコンテナを立ち上げてHTTPでアクセスできることを確認する</h1>
+<p>今回は以下のようなフォルダ構成を仮定して説明する．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/web/</span></span>
+<span class="line"><span>  ├ nginx/</span></span>
+<span class="line"><span>  |  ├ letsencrypt/     &#x3C;=== let's encrypt関連</span></span>
+<span class="line"><span>  |  ├ logs/</span></span>
+<span class="line"><span>  |  |  ├ access.log    &#x3C;=== アクセスログ</span></span>
+<span class="line"><span>  |  |  ├ error.log     &#x3C;=== エラーログ</span></span>
+<span class="line"><span>  |  |  └ certbot.log   &#x3C;=== cronによる証明書の自動更新の際のログ</span></span>
+<span class="line"><span>  |  ├ default.conf     &#x3C;=== nginx.confからincludeされる設定</span></span>
+<span class="line"><span>  |  ├ nginx.conf       &#x3C;=== Nginxの設定</span></span>
+<span class="line"><span>  |  └ Dockerfile</span></span>
+<span class="line"><span>  └ docker-compose.yml </span></span></code></pre>
+<p>まずは．Nginxコンテナを起動するためのDockerfileを書く．詳しくは<a href="https://yasakura.me/post/how-to-use-docker/">Dockerコンテナのライフサイクル</a>を参照のこと．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>FROM nginx:latest</span></span>
+<span class="line"><span>RUN apt-get update &#x26;&#x26; \</span></span>
+<span class="line"><span>    apt-get install -y certbot python-certbot-nginx &#x26;&#x26; \</span></span>
+<span class="line"><span>    apt-get clean &#x26;&#x26; \</span></span>
+<span class="line"><span>    rm -rf /var/lib/apt/lists/* &#x26;&#x26; \</span></span>
+<span class="line"><span>    ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime</span></span>
+<span class="line"><span>ADD nginx.conf /etc/nginx/</span></span>
+<span class="line"><span>ADD default.conf /etc/nginx/conf.d/</span></span></code></pre>
+<ul>
+<li>Nginxコンテナのベースイメージは<a href="https://hub.docker.com/_/nginx">nginx at docker hub</a>を用いることにする．<code>FROM nginx:latest</code>で取得できるNginxイメージはDebian10.4ベース．</li>
+<li>今回はHTTPS対応のためにLet’s encryptを用いることにする．Let’s encryptを使いやすくするためのパッケージである<a href="https://certbot.eff.org/lets-encrypt/debianbuster-nginx">certbot</a>をコンテナにインストールするため，DockerfileのRUNにて<code>apt-get install -y certbot python-certbot-nginx</code>を指定している．
+<ul>
+<li>インストール後，コンテナ内に<code>/etc/letsencrypt</code>というディレクトリが作られるので，後のdocker-compose.ymlにて，ホストの<code>/web/nginx/letsencrypt</code>とリンクさせている．</li>
+</ul>
+</li>
+<li>ホスト側の<code>nginx.conf</code>と<code>default.conf</code>をコンテナ内にコピーするようにADDを指定する．</li>
+</ul>
+<p>次に，以下のようなNginxの設定ファイルを作成＆編集する．パラメータの説明は今回は省く．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="nginx"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">user </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> nginx;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">worker_processes </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">error_log </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /var/log/nginx/error.log </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">warn</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">pid </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">       /var/run/nginx.pid;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">events</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    worker_connections </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1024</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    multi_accept </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">on</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    use </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">epoll</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">http</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    server_tokens </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">off</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    include </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      /etc/nginx/mime.types;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    default_type </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> application/octet-stream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    log_format </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> main</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  '$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">remote_addr</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> - $</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">remote_user</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> [$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">time_local</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">] "$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">request</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">" '</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                      '$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">status</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> $</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">body_bytes_sent</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http_referer</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">" '</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                      '"$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http_user_agent</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">" "$</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">http_x_forwarded_for</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    access_log </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> /var/log/nginx/access.log  </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    sendfile </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">       on</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    tcp_nopush </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">     on</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    tcp_nodelay </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    on</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    keepalive_timeout </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 65</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    include </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/etc/nginx/conf.d/*.conf; &#x3C;=== 別の.confファイルをincludeする</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>また，以下のようなnginx.confからincludeされるdefault.confを作成＆編集する．パラメータの説明は今回は省く．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="nginx"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    server_name </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> &#x3C;hostname>;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    listen </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    location</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> / </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        root </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /usr/share/nginx/html;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        index </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> index.html index.htm;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    # redirect server error pages to the static page /50x.html</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    #</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    error_page </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  500</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 502</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 503</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 504</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /50x.html;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    location</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF"> /50x.html </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        root </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /usr/share/nginx/html;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+<p>そして，以下のようなdocker-compose.ymlを書く．詳しくは<a href="https://yasakura.me/post/how-to-use-docker/">Dockerコンテナのライフサイクル</a>を参照のこと．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'3'</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">services</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  proxy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">./nginx &#x3C;=== /web/nginx/Dockerfileへの相対パス</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    tty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    container_name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">proxy</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    logging</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">      driver</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"json-file"</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">      options</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">        max-size</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"10m"</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">        max-file</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"3"</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    ports</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"80:80"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   &#x3C;=== HTTPで外部からアクセスできるように</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"443:443"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> &#x3C;=== HTTPSで外部からアクセスできるように</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    volumes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/web/nginx/logs:/var/log/nginx'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> &#x3C;=== nginxのログはホスト側と共有する</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'/web/nginx/letsencrypt:/etc/letsencrypt'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> &#x3C;=== letsencryptのディレクトリもホストと共有する</span></span></code></pre>
+<p>最後に，ホストの<code>/web/</code>ディレクトリ内で<code>docker-compose up -d</code>を実行すると，docker-compose.ymlから新たなDockerイメージがビルドされてNginxコンテナが立ち上がる．ブラウザから<code>http://&#x3C;hostname></code>でアクセスできれば，HTTP部分は開通．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">$</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ps</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">CONTAINER</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ID</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        IMAGE</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">           COMMAND</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                  CREATED</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">             STATUS</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">              PORTS</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                                      NAMES</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">5320cf3e8eff</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">        web_proxy</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">       "/docker-entrypoint.…"</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">   21</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> seconds</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ago</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">      Up</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> seconds</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">       0.0.0.0:80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">-</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">80/tcp,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 0.0.0.0:443</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">-</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">443/tcp</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">   proxy</span></span></code></pre>
+<h1 id="httpsに対応する">HTTPSに対応する</h1>
+<p>ホストで<code>docker exec -it proxy bash</code>を実行することでNginxコンテナに入り，<code>cerbot</code>を実行することでLet’s encrypt証明書を発行する．発行された証明書はコンテナ内の<code>/etc/letsencrypt/live/&#x3C;hostname>/</code>に保存される．</p>
+<p>次に，default.confを以下のように編集する．80番ポートへのアクセスは443番ポート(https://)へリダイレクトするように設定し，443番ポートにはsslの設定を行う．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="nginx"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    server_name </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> &#x3C;hostname>;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    listen </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 301</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> https://$host$request_uri;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    server_name </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> &#x3C;hostname>;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    listen </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 443</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ssl </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">on</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ssl_protocols </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TLSv1.2 TLSv1.3;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ssl_certificate </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    /etc/letsencrypt/live/&#x3C;hostname>/fullchain.pem;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    ssl_certificate_key </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">/etc/letsencrypt/live/&#x3C;hostname>/privkey.pem;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    location</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> / </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        root </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /usr/share/nginx/html;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        index </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> index.html index.htm;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    # redirect server error pages to the static page /50x.html</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    #</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    error_page </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  500</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 502</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 503</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 504</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /50x.html;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    location</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#DBEDFF"> /50x.html </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        root </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  /usr/share/nginx/html;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+<p>最後に，ホストの<code>/web/</code>ディレクトリ内で<code>docker-compose restart</code>を実行して，Nginxコンテナを再起動することで，default.confを再読み込みさせる．ブラウザから<code>https://&#x3C;hostname></code>でアクセスできれば，HTTPSの対応が完了する．</p>
+<h1 id="lets-encryptの証明書は90日で期限切れになるので自動で更新するようにする">Let’s encryptの証明書は90日で期限切れになるので，自動で更新するようにする</h1>
+<p>Let’s encryptの証明書は90日で期限切れになるので，定期的に更新する必要がある．証明書の更新を自動で行うため，cronにjobを登録する．</p>
+<ol>
+<li><code>cp /etc/crontab /etc/cron.d/certbot_docker</code>にて，crontabフォーマットファイルをコピーする</li>
+<li><code>certbot_docker</code>に以下のような設定を行う．以下は，毎日午前3時に<code>date; docker exec proxy certbot renew</code>を実行し，結果を<code>/web/nginx/log/certbot.log</code>に出力するというジョブである．
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># m h dom mon dow user	command</span></span>
+<span class="line"><span>0 3    * * * &#x3C;username> { date; docker exec proxy certbot renew; } >> /web/nginx/log/certbot.log 2>&#x26;1</span></span></code></pre>
+</li>
+<li><code>sudo service cron restart</code>により，<code>certbot_docker</code>をcronに反映する．</li>
+<li>毎日午前3時に以下のようなログが<code>/web/nginx/log/certbot.log</code>に出力される．証明書の期限に余裕がある場合は，証明書の更新はスキップされ，証明書の期限が近づくと更新される．
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Thu Jul 23 03:00:01 JST 2020</span></span>
+<span class="line"><span>Saving debug log to /var/log/letsencrypt/letsencrypt.log</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</span></span>
+<span class="line"><span>Processing /etc/letsencrypt/renewal/&#x3C;hostname>.conf</span></span>
+<span class="line"><span>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</span></span>
+<span class="line"><span>Cert not yet due for renewal</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The following certs are not due for renewal yet:</span></span>
+<span class="line"><span>/etc/letsencrypt/live/&#x3C;hostname>/fullchain.pem expires on 20XX-XX-XX (skipped)</span></span>
+<span class="line"><span>No renewals were attempted.</span></span>
+<span class="line"><span>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</span></span></code></pre>
+</li>
+</ol>  </div> </article> <div id="mobile-share-sentinel" class="xl:hidden h-px"></div> <div id="mobile-share-anchor" class="xl:hidden hidden justify-center gap-4 py-4"> <a href="https://twitter.com/intent/tweet?text=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F&amp;title=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </div> <!-- 関連記事 -->  </div> <!-- 右: 追従する目次 (lg以上) --> <aside class="hidden lg:block w-56 shrink-0"> <div class="sticky top-24"> <nav aria-label="目次" id="toc-sidebar" class="text-sm"><p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#モチベーション" data-slug="モチベーション" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">モチベーション</a></li><li style="padding-left: 0rem"><a href="#前準備" data-slug="前準備" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">前準備</a></li><li style="padding-left: 0rem"><a href="#パッケージをアップデートする" data-slug="パッケージをアップデートする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">パッケージをアップデートする</a></li><li style="padding-left: 0rem"><a href="#パッケージの自動アップデートを設定する" data-slug="パッケージの自動アップデートを設定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">パッケージの自動アップデートを設定する</a></li><li style="padding-left: 0rem"><a href="#一般ユーザを新規追加してsudoが使えるようにしておく" data-slug="一般ユーザを新規追加してsudoが使えるようにしておく" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">一般ユーザを新規追加してsudoが使えるようにしておく</a></li><li style="padding-left: 0rem"><a href="#一般ユーザでサーバーにsshできるようにする" data-slug="一般ユーザでサーバーにsshできるようにする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">一般ユーザでサーバーにSSHできるようにする</a></li><li style="padding-left: 0.75rem"><a href="#ローカルで公開鍵を生成する" data-slug="ローカルで公開鍵を生成する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ローカルで公開鍵を生成する</a></li><li style="padding-left: 0.75rem"><a href="#サーバーに公開鍵を登録する" data-slug="サーバーに公開鍵を登録する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">サーバーに公開鍵を登録する</a></li><li style="padding-left: 0rem"><a href="#firewallを設定する" data-slug="firewallを設定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Firewallを設定する</a></li><li style="padding-left: 0rem"><a href="#podmanをインストールする" data-slug="podmanをインストールする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Podmanをインストールする</a></li><li style="padding-left: 0rem"><a href="#nginxコンテナを立ち上げてhttpでアクセスできることを確認する" data-slug="nginxコンテナを立ち上げてhttpでアクセスできることを確認する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Nginxコンテナを立ち上げてHTTPでアクセスできることを確認する</a></li><li style="padding-left: 0rem"><a href="#httpsに対応する" data-slug="httpsに対応する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">HTTPSに対応する</a></li><li style="padding-left: 0rem"><a href="#lets-encryptの証明書は90日で期限切れになるので自動で更新するようにする" data-slug="lets-encryptの証明書は90日で期限切れになるので自動で更新するようにする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Let’s encryptの証明書は90日で期限切れになるので，自動で更新するようにする</a></li></ol></nav>
+
+  <script type="module">const n=document.getElementById("toc-sidebar");if(n){const o=n.querySelectorAll(".toc-link"),i=t=>{o.forEach(e=>{const s=e.dataset.slug===t;e.classList.toggle("text-foreground",s),e.classList.toggle("font-medium",s),e.classList.toggle("text-muted-foreground",!s)})},r=[...o].map(t=>document.getElementById(t.dataset.slug)).filter(t=>t!==null),c=new IntersectionObserver(t=>{const e=t.filter(s=>s.isIntersecting);e.length>0&&i(e[0].target.id)},{rootMargin:"-80px 0px -60% 0px"});r.forEach(t=>c.observe(t))}</script><script type="module">if(!document.documentElement.dataset.tocBilingualReady){let a=function(){const e=document.documentElement.dataset.lang??"ja";document.querySelectorAll("a.toc-entry[data-lang-ja]").forEach(t=>{t.textContent=e==="en"?t.dataset.langEn??"":t.dataset.langJa??""})},l=function(){document.querySelectorAll("a.toc-entry[data-slug]").forEach(e=>{const t=document.getElementById(e.dataset.slug);if(!t)return;const n=t.querySelector(".lang-ja"),o=t.querySelector(".lang-en");n&&o&&(e.dataset.langJa=n.textContent??"",e.dataset.langEn=o.textContent??"")}),a()};document.documentElement.dataset.tocBilingualReady="1",l(),new MutationObserver(a).observe(document.documentElement,{attributes:!0,attributeFilter:["data-lang"]})}</script> </div> </aside> </div> </div> </main>  <aside id="pc-share-aside" class="hidden xl:flex fixed flex-col items-center gap-3 z-10" style="left: max(8px, calc(50vw - 584px)); top: 0px;"> <a href="https://twitter.com/intent/tweet?text=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F&amp;title=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </aside>  <div id="mobile-share-bar" class="xl:hidden fixed bottom-0 left-0 right-0 z-40 translate-y-full transition-transform duration-300 ease-in-out"> <div class="px-6 py-3 flex items-center justify-center gap-4"> <a href="https://twitter.com/intent/tweet?text=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fubuntu-nginx-docker-letsencrypt%2F&amp;title=Ubuntu%E3%81%ABNginx%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E7%AB%8B%E3%81%A6%E3%81%A6HTTPS%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </div> </div> <script>
+    (function () {
+      var bar      = document.getElementById('mobile-share-bar');
+      var anchor   = document.getElementById('mobile-share-anchor');
+      var sentinel = document.getElementById('mobile-share-sentinel');
+      if (!bar || !anchor || !sentinel) return;
+
+      var lastY     = window.scrollY;
+      var threshold = 80;
+      var atEnd     = false;
+
+      // display:none の anchor ではなく常に DOM にある sentinel を監視
+      var observer = new IntersectionObserver(function (entries) {
+        atEnd = entries[0].isIntersecting;
+        if (atEnd) {
+          bar.classList.add('translate-y-full');
+          anchor.classList.remove('hidden');
+          anchor.classList.add('flex');
+        } else {
+          anchor.classList.add('hidden');
+          anchor.classList.remove('flex');
+        }
+      }, { threshold: 0 });
+      observer.observe(sentinel);
+
+      window.addEventListener('scroll', function () {
+        if (atEnd) { lastY = window.scrollY; return; }
+        var currentY = window.scrollY;
+        if (currentY > lastY && currentY > threshold) {
+          bar.classList.remove('translate-y-full');
+        } else {
+          bar.classList.add('translate-y-full');
+        }
+        lastY = currentY;
+      }, { passive: true });
+    })();
+  </script> <script>
+    (function () {
+      var aside   = document.getElementById('pc-share-aside');
+      var article = document.getElementById('article-body');
+      if (!aside || !article) return;
+      var STICKY_TOP = 96; // top-24 = 6rem
+
+      function update() {
+        var top = Math.max(article.getBoundingClientRect().top, STICKY_TOP);
+        aside.style.top = top + 'px';
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>   <button id="toc-toggle" aria-label="目次を開く" class="lg:hidden fixed top-[4.5rem] right-4 z-40 flex items-center gap-1.5 bg-background border border-border rounded-full px-3 py-1.5 text-xs font-medium shadow-sm hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="15" y2="12"></line><line x1="3" y1="18" x2="9" y2="18"></line> </svg> <span class="lang-ja">目次</span> <span class="lang-en">Contents</span> </button>  <div id="toc-drawer" class="lg:hidden fixed inset-0 z-50 invisible opacity-0 transition-all duration-200"> <!-- オーバーレイ --> <div id="toc-overlay" class="absolute inset-0 bg-black/40"></div> <!-- パネル --> <div id="toc-panel" class="absolute right-0 top-0 h-full w-72 max-w-[85vw] bg-background shadow-xl translate-x-full transition-transform duration-200 overflow-y-auto"> <div class="flex items-center justify-between px-5 py-4 border-b border-border"> <button id="toc-close" aria-label="閉じる" class="p-1 rounded hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line> </svg> </button> </div> <div class="px-5 py-4"> <nav aria-label="目次" class="rounded-lg border border-border bg-muted/40 px-6 py-5 mb-10 text-sm"><p class="font-semibold mb-3 text-foreground"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1.5 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#モチベーション" data-slug="モチベーション" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">モチベーション</a></li><li style="padding-left: 0rem"><a href="#前準備" data-slug="前準備" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">前準備</a></li><li style="padding-left: 0rem"><a href="#パッケージをアップデートする" data-slug="パッケージをアップデートする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">パッケージをアップデートする</a></li><li style="padding-left: 0rem"><a href="#パッケージの自動アップデートを設定する" data-slug="パッケージの自動アップデートを設定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">パッケージの自動アップデートを設定する</a></li><li style="padding-left: 0rem"><a href="#一般ユーザを新規追加してsudoが使えるようにしておく" data-slug="一般ユーザを新規追加してsudoが使えるようにしておく" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">一般ユーザを新規追加してsudoが使えるようにしておく</a></li><li style="padding-left: 0rem"><a href="#一般ユーザでサーバーにsshできるようにする" data-slug="一般ユーザでサーバーにsshできるようにする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">一般ユーザでサーバーにSSHできるようにする</a></li><li style="padding-left: 1rem"><a href="#ローカルで公開鍵を生成する" data-slug="ローカルで公開鍵を生成する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ローカルで公開鍵を生成する</a></li><li style="padding-left: 1rem"><a href="#サーバーに公開鍵を登録する" data-slug="サーバーに公開鍵を登録する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">サーバーに公開鍵を登録する</a></li><li style="padding-left: 0rem"><a href="#firewallを設定する" data-slug="firewallを設定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Firewallを設定する</a></li><li style="padding-left: 0rem"><a href="#podmanをインストールする" data-slug="podmanをインストールする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Podmanをインストールする</a></li><li style="padding-left: 0rem"><a href="#nginxコンテナを立ち上げてhttpでアクセスできることを確認する" data-slug="nginxコンテナを立ち上げてhttpでアクセスできることを確認する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Nginxコンテナを立ち上げてHTTPでアクセスできることを確認する</a></li><li style="padding-left: 0rem"><a href="#httpsに対応する" data-slug="httpsに対応する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">HTTPSに対応する</a></li><li style="padding-left: 0rem"><a href="#lets-encryptの証明書は90日で期限切れになるので自動で更新するようにする" data-slug="lets-encryptの証明書は90日で期限切れになるので自動で更新するようにする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Let’s encryptの証明書は90日で期限切れになるので，自動で更新するようにする</a></li></ol></nav> </div> </div> </div> <script>
+        var btn    = document.getElementById('toc-toggle');
+        var drawer = document.getElementById('toc-drawer');
+        var panel  = document.getElementById('toc-panel');
+        var overlay = document.getElementById('toc-overlay');
+        var close  = document.getElementById('toc-close');
+
+        function openDrawer() {
+          drawer.classList.remove('invisible', 'opacity-0');
+          setTimeout(function() { panel.classList.remove('translate-x-full'); }, 10);
+        }
+        function closeDrawer() {
+          panel.classList.add('translate-x-full');
+          drawer.classList.add('opacity-0');
+          setTimeout(function() { drawer.classList.add('invisible'); }, 200);
+        }
+
+        btn.addEventListener('click', openDrawer);
+        close.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // 目次リンクをタップしたら閉じる
+        drawer.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', closeDrawer);
+        });
+      </script> <footer class="border-t border-border mt-20"> <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"> <p>&copy; 2026 yasakura. All rights reserved.</p> <nav aria-label="フッターナビゲーション"> <ul class="flex items-center gap-6 list-none m-0 p-0"> <li> <a href="/site-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">サイトポリシー</span> <span class="lang-en">Site Policy</span> </a> </li> <li> <a href="/privacy-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">プライバシーポリシー</span> <span class="lang-en">Privacy Policy</span> </a> </li> </ul> </nav> </div> </footer>  <div id="search-modal" class="fixed inset-0 z-[60] invisible opacity-0 transition-all duration-150"> <div class="absolute inset-0 bg-black/50"></div> <div class="relative z-10 max-w-xl mx-auto mt-24 px-4"> <div class="bg-background rounded-xl shadow-2xl border border-border overflow-hidden"> <div class="flex items-center gap-3 px-4 py-3 border-b border-border"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> <input id="search-input" type="text" placeholder="記事を検索..." data-placeholder-ja="記事を検索..." data-placeholder-en="Search articles..." autocomplete="off" class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"> <kbd class="hidden sm:inline-flex text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">Esc</kbd> </div> <ul id="search-results" class="max-h-80 overflow-y-auto py-2 list-none m-0 p-0"></ul> <p id="search-empty" class="hidden text-sm text-muted-foreground text-center py-8"> <span class="lang-ja">記事が見つかりませんでした</span> <span class="lang-en">No articles found</span> </p> </div> </div> </div> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.BR7VHDYB.js"></script> </body></html>

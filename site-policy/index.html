@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><meta name="generator" content="Astro v6.4.2"><title>サイトポリシー</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-YXXZ5YDX62"></script><script>(function(){const gaId = "G-YXXZ5YDX62";
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        })();</script><!-- フラッシュ防止: レンダリング前にテーマ・言語を適用 --><script>
+      const theme = localStorage.getItem('theme') ??
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const systemLang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+      document.documentElement.dataset.lang = localStorage.getItem('lang') ?? systemLang;
+    </script><link rel="stylesheet" href="/_astro/Footer.tb1svRbc.css"></head> <body>  <header class="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50"> <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between"> <div class="flex items-center gap-2"> <a href="/" class="font-black text-xl tracking-tight leading-none h-8 flex items-center hover:opacity-80 transition-opacity"> yasakura </a> <a href="/about" class="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
+About
+</a> </div> <div class="flex items-center gap-2"> <button id="search-btn" aria-label="検索" class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </button> <button id="theme-toggle" aria-label="テーマを切り替える" class="flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"> <!-- 太陽: ライトモード時に表示 --> <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path> </svg> <!-- 月: ダークモード時に表示 --> <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path> </svg> </button> <script type="module">const o=document.getElementById("theme-toggle"),c=document.getElementById("icon-sun"),s=document.getElementById("icon-moon");function n(e){const t=e==="dark";document.documentElement.classList.toggle("dark",t),c?.classList.toggle("hidden",!t),s?.classList.toggle("hidden",t)}const d=document.documentElement.classList.contains("dark")?"dark":"light";n(d);o?.addEventListener("click",()=>{const e=document.documentElement.classList.contains("dark")?"light":"dark";localStorage.setItem("theme",e),n(e)});window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{localStorage.getItem("theme")||n(e.matches?"dark":"light")});</script> <button id="lang-toggle" aria-label="言語切り替え" class="flex items-center gap-1 h-8 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-xs font-bold tabular-nums"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path> </svg> <span id="lang-label">JP</span> </button> </div> </div> </header> <script type="module">document.getElementById("search-btn")?.addEventListener("click",()=>{document.dispatchEvent(new CustomEvent("open-search"))});const n=document.getElementById("lang-toggle"),t=document.getElementById("lang-label");function a(e){document.documentElement.dataset.lang=e,t&&(t.textContent=e==="en"?"EN":"JP")}document.querySelector(".lang-ja, .lang-en")||n?.classList.add("hidden");a(document.documentElement.dataset.lang??"ja");n?.addEventListener("click",()=>{const e=document.documentElement.dataset.lang==="en"?"ja":"en";localStorage.setItem("lang",e),a(e)});</script> <main class="max-w-3xl mx-auto px-6 py-12"> <nav aria-label="パンくずリスト"> <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground list-none m-0 p-0"> <li class="flex items-center gap-1">  <a href="/" class="hover:text-foreground transition-colors"> Home </a> </li><li class="flex items-center gap-1"> <span aria-hidden="true">/</span> <span class="text-foreground"> <span class="lang-ja">サイトポリシー</span><span class="lang-en">Site Policy</span> </span> </li> </ol> </nav> <header class="mt-8 mb-10"> <h1 class="text-2xl font-bold">  <span class="lang-ja">サイトポリシー</span> <span class="lang-en">Site Policy</span>  </h1> <p class="mt-2 text-sm text-muted-foreground">
+Last updated: 2026/06/03 </p> </header> <div class="prose prose-zinc dark:prose-invert max-w-none
+      prose-a:text-foreground prose-a:underline-offset-4
+      prose-headings:font-semibold
+    "> <div class="lang-ja">
+<p>このサイトポリシー（以下、「本ポリシー」といいます。）は、当ブログ運営者（以下、「運営者」といいます。）がこのウェブサイト上（以下、「当ブログ」といいます。）で提供するコンテンツの利用条件を定めるものです。当ブログを利用することにより、当ブログの利用者（以下、「ユーザー」といいます。）は、本ポリシーに同意したものとみなされます。不同意の意思表示は、本ブログを利用しないことにより認められるものとします。なお、本サイトに掲載されている情報は、予告なく変更される場合があります。</p>
+<h2 id="適用">適用</h2>
+<ol>
+<li>本ポリシーは、当ブログの利用に関わる一切の関係に適用されるものとします。</li>
+<li>運営者は当ブログに関し、本ポリシーのほか、ご利用にあたってのルール等、各種の定め（以下、「個別規定」といいます。）をすることがあります。これら個別規定はその名称のいかんに関わらず、本ポリシーの一部を構成するものとします。</li>
+<li>本ポリシーの規定が前条の個別規定の規定と矛盾する場合には、個別規定において特段の定めなき限り、個別規定の規定が優先されるものとします。</li>
+</ol>
+<h2 id="禁止事項">禁止事項</h2>
+<p>ユーザーは、当ブログの利用にあたり、以下の行為をしてはなりません。</p>
+<ol>
+<li>当ブログの内容等、当ブログに含まれる著作権、商標権ほか知的財産権を侵害する行為</li>
+<li>当ブログによって得られた情報を商業的に利用する行為</li>
+<li>不正な目的を持って当ブログを利用する行為</li>
+<li>当ブログに関連して、反社会的勢力に対して直接または間接に利益を供与する行為</li>
+<li>その他、運営者が不適切と判断する行為</li>
+</ol>
+<h2 id="当ブログの公開の停止など">当ブログの公開の停止など</h2>
+<ol>
+<li>運営者は、以下のいずれかの事由があると判断した場合、ユーザーに事前に通知することなく当ブログの全部または一部の公開を停止または中断することができるものとします。
+<ol>
+<li>当ブログにかかるコンピュータシステムの保守点検または更新を行う場合</li>
+<li>地震、落雷、火災、停電または天災などの不可抗力により、当ブログの公開が困難となった場合</li>
+<li>コンピュータまたは通信回線等が事故などにより停止した場合</li>
+<li>その他、運営者が当ブログの提供が困難と判断した場合</li>
+</ol>
+</li>
+<li>運営者は、当ブログの公開の停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害についても、一切の責任を負わないものとします。</li>
+</ol>
+<h2 id="保証の否認および免責事項">保証の否認および免責事項</h2>
+<ol>
+<li>運営者は、当ブログに事実上または法律上の瑕疵（最新性、安全性、信頼性、正確性、完全性、有効性、特定の目的への適合性、セキュリティなどに関する欠陥、エラーやバグ、権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。</li>
+<li>運営者は、当ブログに起因してユーザーに生じたあらゆる損害について一切の責任を負いません。</li>
+<li>当ブログに掲載されている情報は、一個人の意見・見解であり、いかなる組織を代表するものではありません。</li>
+</ol>
+<h2 id="当ブログ内容の変更等">当ブログ内容の変更等</h2>
+<p>運営者は、ユーザーに通知することなく、当ブログの内容を変更しまたは当ブログの公開を中止することができるものとし、これによってユーザーに生じた損害について一切の責任を負いません。</p>
+<h2 id="利用規約の変更">利用規約の変更</h2>
+<p>運営者は、必要と判断した場合には、ユーザーに通知することなくいつでも本ポリシーを変更することができるものとします。その場合は変更後の利用規約が適用されます。</p>
+<h2 id="知的財産権の保護">知的財産権の保護</h2>
+<ol>
+<li>当ブログに掲載されている文章・画像・動画などの著作物の情報や肖像権、商標権、その他知的財産権は、各権利所有者に帰属します。万が一問題がある場合は、運営者までご連絡いただけますと幸いです。</li>
+<li>ユーザーは、運営者が承認した場合を除き、当ブログを通じて入手したいかなる情報も複写、複製、再発行、アップロード、掲載、転送、配布または二次的著作物作成その他私的利用の範囲を超えて使用することができないものとします。</li>
+</ol>
+<h2 id="外部サイトから当ブログへのリンク">外部サイトから当ブログへのリンク</h2>
+<p>下記の条件に同意の上、リンクを行ってください。リンクに際して、運営者の許諾は不要です。</p>
+<ol>
+<li>当ブログへのリンクであることを明白にすること</li>
+<li>運営者からリンクの削除を申し入れた場合には、即座にリンクを中止すること</li>
+<li>営利を目的としたものでないこと</li>
+<li>当ブログに掲載されている画像や動画に対する直接リンクでないこと</li>
+<li>当ブログに社会的・経済的損失が生じないこと</li>
+<li>運営者が以下に該当すると判断するウェブサイトからはリンクしない
+<ol>
+<li>猥褻・冒涜的な行為・発言などの公序良俗に反する内容を含むウェブサイト</li>
+<li>運営者または第三者を誹謗、中傷、脅迫したり、信用を毀損する内容を含むウェブサイト</li>
+<li>運営者または第三者の著作権その他財産権を侵害したり、損害、不利益を与える内容を含むウェブサイト</li>
+<li>その他違法な内容を含むウェブサイト</li>
+</ol>
+</li>
+<li>当ブログへのリンクを許容することは、当ブログの内容に関して保証するものではなく、かつリンクすることによって生じる一切の責任を運営者は一切負いません。</li>
+<li>リンクは予告無しに変更あるいは削除されることがあります</li>
+</ol>
+<h2 id="当ブログから外部サイトへのリンク">当ブログから外部サイトへのリンク</h2>
+<ol>
+<li>当ブログに掲載されている外部サイトは、第三者が運営しているものであり、当ブログの管理するものではありません。第三者のサイトに掲載されている情報の正確性や外部サイトの利用により生じるいかなる損害については、運営者は一切の責任を負いません。</li>
+<li>リンクされていることは、リンク先と運営者が関係会社、取引先などの関係を有していることを意味しません。</li>
+</ol>
+<h2 id="広告の掲載">広告の掲載</h2>
+<p>運営者は、第三者が提供する広告を当ブログ上に掲載することができるものとします。広告の掲載によるユーザ情報の管理については、<a href="/privacy-policy">プライバシーポリシー</a>を参照ください。</p>
+<h2 id="アクセス解析ツールの利用">アクセス解析ツールの利用</h2>
+<p>運営者は、第三者が提供するアクセス解析ツールを当ブログに組み込むことができるものとします。アクセス解析ツールによるユーザ情報の管理については、<a href="/privacy-policy">プライバシーポリシー</a>を参照ください。</p>
+<h2 id="準拠法">準拠法</h2>
+<p>本ポリシーの解釈にあたっては、日本法を準拠法とします。</p>
+<p>以上</p>
+</div>
+<div class="lang-en">
+<p>This Site Policy (hereinafter “Policy”) sets forth the terms of use for content provided by the blog operator (hereinafter “Operator”) on this website (hereinafter “Blog”). By using the Blog, users (hereinafter “Users”) are deemed to have agreed to this Policy. Disagreement is expressed by refraining from using the Blog. Please note that information published on this site is subject to change without notice.</p>
+<h2 id="application">Application</h2>
+<ol>
+<li>This Policy applies to all relationships relating to the use of the Blog.</li>
+<li>In addition to this Policy, the Operator may establish various rules and regulations (hereinafter “Individual Provisions”) for the use of the Blog. These Individual Provisions, regardless of their title, shall constitute a part of this Policy.</li>
+<li>In the event of a conflict between this Policy and Individual Provisions, the Individual Provisions shall prevail unless otherwise specified therein.</li>
+</ol>
+<h2 id="prohibited-acts">Prohibited Acts</h2>
+<p>Users must not engage in any of the following acts when using the Blog:</p>
+<ol>
+<li>Acts that infringe on copyright, trademark rights, or other intellectual property rights contained in the Blog</li>
+<li>Commercially exploiting information obtained through the Blog</li>
+<li>Using the Blog for improper purposes</li>
+<li>Directly or indirectly providing benefits to antisocial forces in connection with the Blog</li>
+<li>Any other acts deemed inappropriate by the Operator</li>
+</ol>
+<h2 id="suspension-of-blog-publication">Suspension of Blog Publication</h2>
+<ol>
+<li>The Operator may suspend or interrupt all or part of the Blog’s publication without prior notice to Users if any of the following occur:
+<ol>
+<li>When performing maintenance, inspection, or updates to the computer systems of the Blog</li>
+<li>When publication becomes difficult due to force majeure such as earthquakes, lightning, fire, power outages, or natural disasters</li>
+<li>When computers or communication lines are stopped due to accidents</li>
+<li>In any other case where the Operator deems it difficult to provide the Blog</li>
+</ol>
+</li>
+<li>The Operator shall bear no responsibility for any disadvantage or damage suffered by Users or third parties due to the suspension or interruption of the Blog’s publication.</li>
+</ol>
+<h2 id="disclaimer">Disclaimer</h2>
+<ol>
+<li>The Operator makes no express or implied warranty that the Blog is free from factual or legal defects (including defects in timeliness, safety, reliability, accuracy, completeness, effectiveness, fitness for a particular purpose, security, errors, bugs, and infringement of rights).</li>
+<li>The Operator accepts no responsibility for any damages arising from the Blog.</li>
+<li>Information posted on this Blog represents the opinion of an individual and does not represent any organization.</li>
+</ol>
+<h2 id="changes-to-blog-content">Changes to Blog Content</h2>
+<p>The Operator may change the content of the Blog or discontinue its publication without notice to Users, and shall bear no responsibility for any damages caused to Users as a result.</p>
+<h2 id="changes-to-this-policy">Changes to This Policy</h2>
+<p>The Operator may change this Policy at any time without notice to Users when deemed necessary. In such cases, the revised Policy shall apply.</p>
+<h2 id="protection-of-intellectual-property-rights">Protection of Intellectual Property Rights</h2>
+<ol>
+<li>The copyright, portrait rights, trademark rights, and other intellectual property rights of works such as text, images, and videos posted on this Blog belong to their respective rights holders. If you have any concerns, please contact the Operator.</li>
+<li>Unless approved by the Operator, Users may not copy, reproduce, republish, upload, post, transmit, distribute, create derivative works of, or otherwise use any information obtained through the Blog beyond the scope of personal use.</li>
+</ol>
+<h2 id="links-from-external-sites-to-this-blog">Links from External Sites to This Blog</h2>
+<p>Please agree to the following conditions before linking. The Operator’s permission is not required for linking.</p>
+<ol>
+<li>Make it clear that the link points to this Blog</li>
+<li>Immediately cease linking if the Operator requests its removal</li>
+<li>The link must not be for commercial purposes</li>
+<li>No direct links to images or videos posted on this Blog</li>
+<li>The link must not cause social or economic harm to this Blog</li>
+<li>Do not link from websites that the Operator determines fall under the following categories:
+<ol>
+<li>Websites containing content that violates public order and morals, such as obscene or blasphemous acts or statements</li>
+<li>Websites containing content that defames, slanders, threatens, or damages the reputation of the Operator or third parties</li>
+<li>Websites that infringe on the copyright or other property rights of the Operator or third parties, or cause damage or disadvantage</li>
+<li>Websites containing other illegal content</li>
+</ol>
+</li>
+<li>Permitting links to this Blog does not constitute a guarantee of its content, and the Operator bears no responsibility for any damages arising from such links.</li>
+<li>Links may be changed or removed without notice.</li>
+</ol>
+<h2 id="links-from-this-blog-to-external-sites">Links from This Blog to External Sites</h2>
+<ol>
+<li>External sites linked from this Blog are operated by third parties and are not managed by the Operator. The Operator accepts no responsibility for the accuracy of information on third-party sites or for any damages arising from their use.</li>
+<li>The existence of a link does not imply any affiliation or business relationship between the Operator and the linked site.</li>
+</ol>
+<h2 id="advertisements">Advertisements</h2>
+<p>The Operator may display advertisements provided by third parties on this Blog. For information on how user data is managed in connection with advertisements, please refer to the <a href="/privacy-policy">Privacy Policy</a>.</p>
+<h2 id="use-of-access-analysis-tools">Use of Access Analysis Tools</h2>
+<p>The Operator may incorporate access analysis tools provided by third parties into this Blog. For information on how user data is managed through access analysis tools, please refer to the <a href="/privacy-policy">Privacy Policy</a>.</p>
+<h2 id="governing-law">Governing Law</h2>
+<p>This Policy shall be governed by and construed in accordance with the laws of Japan.</p>
+</div> </div> </main> <footer class="border-t border-border mt-20"> <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"> <p>&copy; 2026 yasakura. All rights reserved.</p> <nav aria-label="フッターナビゲーション"> <ul class="flex items-center gap-6 list-none m-0 p-0"> <li> <a href="/site-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">サイトポリシー</span> <span class="lang-en">Site Policy</span> </a> </li> <li> <a href="/privacy-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">プライバシーポリシー</span> <span class="lang-en">Privacy Policy</span> </a> </li> </ul> </nav> </div> </footer>  <div id="search-modal" class="fixed inset-0 z-[60] invisible opacity-0 transition-all duration-150"> <div class="absolute inset-0 bg-black/50"></div> <div class="relative z-10 max-w-xl mx-auto mt-24 px-4"> <div class="bg-background rounded-xl shadow-2xl border border-border overflow-hidden"> <div class="flex items-center gap-3 px-4 py-3 border-b border-border"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> <input id="search-input" type="text" placeholder="記事を検索..." data-placeholder-ja="記事を検索..." data-placeholder-en="Search articles..." autocomplete="off" class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"> <kbd class="hidden sm:inline-flex text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">Esc</kbd> </div> <ul id="search-results" class="max-h-80 overflow-y-auto py-2 list-none m-0 p-0"></ul> <p id="search-empty" class="hidden text-sm text-muted-foreground text-center py-8"> <span class="lang-ja">記事が見つかりませんでした</span> <span class="lang-en">No articles found</span> </p> </div> </div> </div> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.BR7VHDYB.js"></script> </body></html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><meta name="generator" content="Astro v6.4.2"><title>Gitをやっていく</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-YXXZ5YDX62"></script><script>(function(){const gaId = "G-YXXZ5YDX62";
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        })();</script><!-- フラッシュ防止: レンダリング前にテーマ・言語を適用 --><script>
+      const theme = localStorage.getItem('theme') ??
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const systemLang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+      document.documentElement.dataset.lang = localStorage.getItem('lang') ?? systemLang;
+    </script><link rel="stylesheet" href="/_astro/Footer.tb1svRbc.css"></head> <body>  <header class="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50"> <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between"> <div class="flex items-center gap-2"> <a href="/" class="font-black text-xl tracking-tight leading-none h-8 flex items-center hover:opacity-80 transition-opacity"> yasakura </a> <a href="/about" class="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
+About
+</a> </div> <div class="flex items-center gap-2"> <button id="search-btn" aria-label="検索" class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </button> <button id="theme-toggle" aria-label="テーマを切り替える" class="flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"> <!-- 太陽: ライトモード時に表示 --> <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path> </svg> <!-- 月: ダークモード時に表示 --> <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path> </svg> </button> <script type="module">const o=document.getElementById("theme-toggle"),c=document.getElementById("icon-sun"),s=document.getElementById("icon-moon");function n(e){const t=e==="dark";document.documentElement.classList.toggle("dark",t),c?.classList.toggle("hidden",!t),s?.classList.toggle("hidden",t)}const d=document.documentElement.classList.contains("dark")?"dark":"light";n(d);o?.addEventListener("click",()=>{const e=document.documentElement.classList.contains("dark")?"light":"dark";localStorage.setItem("theme",e),n(e)});window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{localStorage.getItem("theme")||n(e.matches?"dark":"light")});</script> <button id="lang-toggle" aria-label="言語切り替え" class="flex items-center gap-1 h-8 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-xs font-bold tabular-nums"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path> </svg> <span id="lang-label">JP</span> </button> </div> </div> </header> <script type="module">document.getElementById("search-btn")?.addEventListener("click",()=>{document.dispatchEvent(new CustomEvent("open-search"))});const n=document.getElementById("lang-toggle"),t=document.getElementById("lang-label");function a(e){document.documentElement.dataset.lang=e,t&&(t.textContent=e==="en"?"EN":"JP")}document.querySelector(".lang-ja, .lang-en")||n?.classList.add("hidden");a(document.documentElement.dataset.lang??"ja");n?.addEventListener("click",()=>{const e=document.documentElement.dataset.lang==="en"?"ja":"en";localStorage.setItem("lang",e),a(e)});</script> <main> <!-- パンくず --> <div class="max-w-5xl mx-auto px-6 pt-10"> <nav aria-label="パンくずリスト"> <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground list-none m-0 p-0"> <li class="flex items-center gap-1">  <a href="/" class="hover:text-foreground transition-colors"> Home </a> </li><li class="flex items-center gap-1"> <span aria-hidden="true">/</span> <span class="text-foreground"> Gitをやっていく </span> </li> </ol> </nav> </div> <!-- タイトル: 全幅 --> <header class="mt-8 py-12"> <div class="max-w-5xl mx-auto px-6"> <!-- 日付: 左寄せ・タイトル上 --> <div class="flex justify-center items-center gap-x-5 text-sm text-muted-foreground mb-3"> <time datetime="2020-08-13T00:00:00.000Z"> 2020/08/13 </time> <span>
+Updated:  <time datetime="2020-10-05T00:00:00.000Z"> 2020/10/05 </time> </span> </div> <!-- タイトル: 中央寄せ --> <h1 class="text-4xl font-bold leading-tight my-6 text-center"> Gitをやっていく </h1> <!-- X アカウント --> <div class="flex justify-center mt-4"> <a href="https://x.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg>
+@yasakurara </a> </div> <!-- GitHub アカウント --> <div class="flex justify-center mt-2"> <a href="https://github.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+@yasakurara </a> </div> <!-- タグ: 中央寄せ・タイトル下 -->  </div> </header> <!-- 本文エリア --> <div class="max-w-5xl mx-auto px-6 py-10"> <div class="flex gap-12"> <!-- 中: 記事本文 --> <div class="flex-1 min-w-0"> <article id="article-body"> <!-- 本文 --> <div class="prose prose-zinc dark:prose-invert max-w-none
+            prose-headings:scroll-mt-24
+            prose-h1:mt-10 [&_h1:first-of-type]:mt-0
+            prose-a:text-foreground prose-a:underline-offset-4
+            prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+            prose-pre:rounded-lg prose-pre:border prose-pre:border-border prose-pre:overflow-x-auto
+            [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit
+          ">  <h1 id="モチベーション">モチベーション</h1>
+<ul>
+<li>個人的に普段よく使うGitコマンドについて自分なりにまとめておきたい</li>
+<li><a href="https://git-scm.com/book/ja/v2">Pro Git</a>だとカロリー過多</li>
+</ul>
+<h1 id="repositoryを用意する">Repositoryを用意する</h1>
+<h2 id="ローカルリポジトリから始める">ローカルリポジトリから始める</h2>
+<ul>
+<li><code>git init &#x3C;directory></code>
+<ul>
+<li><code>&#x3C;directory></code>をローカルリポジトリとする．</li>
+<li><code>&#x3C;directory></code>内に<code>.git</code>という隠しフォルダが作成される．Gitの諸々は<code>.git</code>で管理されることになる．</li>
+</ul>
+</li>
+</ul>
+<h2 id="リモートリポジトリから始める">リモートリポジトリから始める</h2>
+<ol>
+<li>GitHubにSSH公開鍵を登録しておく
+<ol>
+<li>
+<p><code>cd ~/.ssh</code></p>
+</li>
+<li>
+<p><code>ssh-keygen -t rsa -b 4096</code>で鍵作成</p>
+</li>
+<li>
+<p><code>chmod 600 &#x3C;秘密鍵へのパス></code></p>
+</li>
+<li>
+<p>パスフレーズを設定したなら</p>
+<ol>
+<li><code>ssh-add &#x3C;秘密鍵へのパス></code>で秘密鍵をSSHエージェントに登録</li>
+<li><code>ssh-add -l</code>でSSHエージェントに秘密鍵が登録されたことを確認</li>
+</ol>
+</li>
+<li>
+<p><code>pbcopy &#x3C; &#x3C;公開鍵へのパス></code>で公開鍵をクリップボードにコピー</p>
+</li>
+<li>
+<p><a href="https://github.com/settings/keys">SSH and GPG keys</a>の<code>New SSH key</code>に公開鍵をコピペ</p>
+</li>
+<li>
+<p><code>~/.ssh/config</code>に接続先を登録</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Host &#x3C;nickname></span></span>
+<span class="line"><span>HostName github.com</span></span>
+<span class="line"><span>IdentityFile &#x3C;秘密鍵へのパス></span></span>
+<span class="line"><span>User git</span></span></code></pre>
+</li>
+<li>
+<p><code>ssh -T &#x3C;nickname></code>で接続確認</p>
+<ul>
+<li><code>Hi XXX! You've successfully authenticated, but GitHub does not provide shell access.</code>と言われれば優勝</li>
+</ul>
+</li>
+<li>
+<p><code>rm &#x3C;公開鍵へのパス></code>で公開鍵を削除しておく</p>
+</li>
+</ol>
+</li>
+<li><code>git clone git@github.com:&#x3C;repository>.git &#x3C;directory></code>
+<ul>
+<li><code>&#x3C;directory></code> : ローカルリポジトリとしたいディレクトリへのパス</li>
+<li><code>&#x3C;directory></code>内に<code>.git</code>という隠しフォルダが作成される．Gitの諸々は<code>.git</code>で管理されることになる．</li>
+</ul>
+</li>
+</ol>
+<h1 id="repositoryの初期設定をする">Repositoryの初期設定をする</h1>
+<h2 id="ユーザ情報を設定する">ユーザ情報を設定する</h2>
+<ol>
+<li><code>git config --global user.name "&#x3C;username>"</code>
+<ul>
+<li>ローカルマシン内のすべてのlocal repositoryに触れるユーザを<code>&#x3C;username></code>に設定する．</li>
+<li>この設定情報は<code>~/.gitconfig</code>に保存される．</li>
+</ul>
+</li>
+<li>Local repositroy内で<code>git config --local user.name "&#x3C;username>"</code>
+<ul>
+<li>Local repositoryでの作業は<code>&#x3C;username></code>によって行われたものとしてログされていく．</li>
+<li><code>git config --local</code>により設定したものは<code>.git/config</code>に保存される．
+<ul>
+<li>globalとlocalをどっちも設定している場合は，localの設定が優先される．</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>同じ要領で，<code>git config --global/local user.email</code>でメールアドレスを登録する．</li>
+</ol>
+<h2 id="デフォルトのエディタやmerge-tool-diff-toolを設定する">デフォルトのエディタやMerge tool, Diff toolを設定する</h2>
+<ul>
+<li>
+<p><code>~/.gitconfig</code>または<code>.git/config</code>に以下を追加する．</p>
+<ul>
+<li>デフォルトエディタ，Marge tool, Diff toolにVSCodeを用いる場合は以下のようにする．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[core]</span></span>
+<span class="line"><span>    editor = code --wait</span></span>
+<span class="line"><span>[merge]</span></span>
+<span class="line"><span>    tool = vscode</span></span>
+<span class="line"><span>[mergetool "vscode"]</span></span>
+<span class="line"><span>    cmd = code --wait $MERGED</span></span>
+<span class="line"><span>[diff]</span></span>
+<span class="line"><span>    tool = vscode</span></span>
+<span class="line"><span>[difftool "vscode"]</span></span>
+<span class="line"><span>    cmd = code --wait --diff $LOCAL $REMOTE</span></span></code></pre>
+</li>
+</ul>
+<h2 id="オリジナルのサブコマンドを設定する">オリジナルのサブコマンドを設定する</h2>
+<ul>
+<li>例えば，<code>git config --global alias.co "checkout"</code>
+<ul>
+<li><code>git co</code>で<code>git checkout</code>を呼ぶことができる</li>
+</ul>
+</li>
+<li><code>~/.gitconfig</code>に直接設定してもよい．例えば，以下は<code>git history</code>で変更履歴を可視化するサブコマンド．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[alias]</span></span>
+<span class="line"><span>	history = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all</span></span></code></pre>
+<h2 id="設定値の確認">設定値の確認</h2>
+<ul>
+<li><code>git config --local -l</code>または<code>git config --global -l</code>で設定を確認できる</li>
+<li><code>~/.gitconfig</code>または<code>&#x3C;local repository>/.git/config</code>を直接見ても良い．</li>
+</ul>
+<h2 id="gitで管理したくないファイルを指定する">Gitで管理したくないファイルを指定する</h2>
+<ul>
+<li>
+<p>例えば，Macだと，<code>.DS_Store</code>という隠しファイルが勝手に作られてしまうので，<code>.DS_Store</code>をGitの管理対象から除くためには以下を実行すると良い．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>git config --global core.excludesfile ~/.gitignore_global</span></span>
+<span class="line"><span>echo ".DS_Store" >> ~/.gitignore_global</span></span></code></pre>
+</li>
+<li>
+<p><code>git ls-files -io --exclude-standard</code>で，excludesfileにて無視されているファイル一覧を確認できる．</p>
+</li>
+</ul>
+<h1 id="リモートリポジトリにはニックネームが付いている">リモートリポジトリにはニックネームが付いている</h1>
+<p>リモートリポジトリには，ニックネームがついている．例えば，cloneしてきたローカルリポジトリにて，<code>git config -l</code>または<code>git remote -v</code>を実行すると，以下のように，リモートリポジトリが<code>origin</code>と名付けられていることが確認できる．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># git config -l でconfigを直接見る</span></span>
+<span class="line"><span>remote.origin.url=git@github.com:&#x3C;ユーザ名>/&#x3C;リポジトリ名>.git</span></span>
+<span class="line"><span>remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git remote -v でリモートリポジトリ一覧をみる</span></span>
+<span class="line"><span>origin	git@github.com:&#x3C;ユーザ名>/&#x3C;リポジトリ名>.git (fetch)</span></span>
+<span class="line"><span>origin	git@github.com:&#x3C;ユーザ名>/&#x3C;リポジトリ名>.git (push)</span></span></code></pre>
+<p>一方，<code>git init</code>で作成したローカルリポジトリに，任意のリモートリポジトリのニックネームを設定するには，<code>git remote add &#x3C;nickname> git@github.com:&#x3C;user>/&#x3C;repository>.git</code>を実行する．</p>
+<p>ここで設定された/されているリモートリポジトリのニックネーム（たとえば<code>origin</code>など）は，<code>git push origin master</code>や<code>git pull origin master</code>などのコマンドで利用される．</p>
+<h1 id="githubのレポジトリにhttpsではなくsshを使ってアクセスするように変更する">GitHubのレポジトリにHTTPSではなくSSHを使ってアクセスするように変更する</h1>
+<p>GitHubは2021年8月13日以降，パスワード（HTTPS）を使ったレポジトリへのアクセスを<a href="https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/">禁止する</a>．</p>
+<p>GitHubにpushしたときに，GitHubから”You recently used a password to access the repository at <repository>“という内容のメールが飛んできた場合，<code>&#x3C;repository></code>へのアクセス方法がSSHではなくHTTPSになっている．</repository></p>
+<p><code>git remote -v</code>すると，以下のように<code>https</code>から始まるリモートリポジトリが登録されていることが確認できる．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>origin  https://github.com/&#x3C;user>/&#x3C;repository>.git (fetch)</span></span>
+<span class="line"><span>origin  https://github.com/&#x3C;user>/&#x3C;repository>.git (push)</span></span></code></pre>
+<p>SSHを使ったアクセスに変更するには，<code>git remote set-url origin git@github.com:&#x3C;user>/&#x3C;repository>.git</code>を実行し（<code>git@github.com</code>の部分は自分のsshの設定による．sshの設定については<a href="#%E3%83%AA%E3%83%A2%E3%83%BC%E3%83%88%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%8B%E3%82%89%E5%A7%8B%E3%82%81%E3%82%8B">リモートリポジトリから始める</a>を参照），<code>git remote -v</code>すると，以下のように設定され，以後はSSHによるアクセスとなる．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>origin	git@github.com:&#x3C;user>/&#x3C;repository>.git (fetch)</span></span>
+<span class="line"><span>origin	git@github.com:&#x3C;user>/&#x3C;repository>.git (push)</span></span></code></pre>
+<h1 id="コミットのいろいろな呼ばれ方">コミットのいろいろな呼ばれ方</h1>
+<ul>
+<li>ブランチ：枝の先端のコミットを指す．「枝全体のコミット群をまとめたもの」をイメージしてしまうが，そうではない．</li>
+<li>HEAD：あるコミットを指すポインタのようなもの．
+<ul>
+<li>HEAD^ と HEAD~ は，HEADの一つ前を指す．</li>
+<li>HEAD^^^　と　HEAD~~~ と HEAD~3　は全部同じ意味．</li>
+<li>あるブランチをチェックアウトしたなら，HEADはそのブランチを指している．</li>
+<li>無名ブランチとしてチェックアウトしているのなら，HEADはそのブランチを指しており，これをdetached HEADという．
+<ul>
+<li>無名ブランチ：ブランチ名でなくあるコミットを直接チェックアウトした場合，チェックアウト先のブランチを無名ブランチと呼ぶらしい．</li>
+</ul>
+</li>
+<li>ORIG_HEAD：コミットオブジェクトをつくるコマンドの実行前にHEADだったコミットを指す
+<ul>
+<li>基本的に，<code>git reflog</code>の<code>HEAD@{1}</code>と<code>ORIG_HEAD</code>は同じコミットを指すが，<code>git stash</code>はコミットオブジェクトをつくるので，<code>git reflog</code>の<code>HEAD@{1}</code>と<code>ORIG_HEAD</code>がずれることに注意．</li>
+</ul>
+</li>
+<li>FETCH_HEAD：最後に<code>git fetch</code>によって更新された<code>origin/&#x3C;branch></code>を指す．</li>
+<li>MERGE_HEAD：マージ元のブランチを指す．</li>
+<li>CHERRY_PICK_HEAD：チェリーピック元のコミットを指す．</li>
+</ul>
+</li>
+</ul>
+<h1 id="ブランチのいろいろな呼ばれ方">ブランチのいろいろな呼ばれ方</h1>
+<p><code>origin</code>が以下のようなブランチを持っているとすると，</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>master</span></span>
+<span class="line"><span>branch1</span></span>
+<span class="line"><span>branch2</span></span></code></pre>
+<p><code>git clone</code>により，以下のようなブランチがローカルリポジトリにつくられる．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>master</span></span>
+<span class="line"><span>origin/master</span></span>
+<span class="line"><span>origin/branch1</span></span>
+<span class="line"><span>origin/branch2</span></span></code></pre>
+<ul>
+<li><code>master</code>は，<code>origin/master</code>を追跡するブランチであり，「作業ブランチ」と呼ぶ．</li>
+<li><code>origin/master</code>は，作業ブランチ<code>master</code>の「上流ブランチ」であり，リモートリポジトリの<code>master</code>を追跡する「リモート追跡ブランチ」でもある．
+<ul>
+<li><code>git branch -vv</code>にて，作業ブランチと上流ブランチの対応を確認することができる．</li>
+</ul>
+</li>
+<li>いまいるブランチを「カレントブランチ」と呼ぶ．
+<ul>
+<li><code>git status</code>で確認できる</li>
+</ul>
+</li>
+</ul>
+<h1 id="リモートブランチをリモート追跡ブランチに取り込む">リモートブランチをリモート追跡ブランチに取り込む</h1>
+<ul>
+<li>
+<p><code>git fetch &#x3C;remote> &#x3C;branch></code>すると，リモートの<code>&#x3C;branck></code>が<code>&#x3C;remote>/&#x3C;branch></code>に取り込まれる．</p>
+<ul>
+<li>例：<code>git fetch origin master</code>により，originのmasterがorigin/masterに取り込まれる．</li>
+</ul>
+</li>
+<li>
+<p><code>git fetch &#x3C;remote></code>すると，リモートの全ブランチが<code>origin/*</code>に取り込まれる．</p>
+<ul>
+<li><code>&#x3C;branch></code>を省略すると，<code>.git/config</code>の<code>remote.origin.fetch</code>の設定が用いられる．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[remote "origin"]</span></span>
+<span class="line"><span>    fetch = +refs/heads/*:refs/remotes/origin/* &#x3C;=== +&#x3C;source>:&#x3C;target></span></span></code></pre>
+<ul>
+<li>例：<code>git fetch origin</code>を実行すると，originの全ブランチが<code>origin/*</code>に取り込まれる．</li>
+</ul>
+</li>
+<li>
+<p><code>git fetch</code>を実行すると</p>
+<ul>
+<li>
+<p><code>&#x3C;remote></code>として，<code>.git/config</code>の作業ブランチごとに設定されている<code>remote</code>パラメータが適用される．</p>
+<ul>
+<li>例：以下のような<code>.git/config</code>の場合，<code>master</code>上で<code>&#x3C;remote></code>を省略すると，<code>origin</code>が適用される．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[branch "master"]</span></span>
+<span class="line"><span>        remote = origin</span></span></code></pre>
+</li>
+<li>
+<p>カレントブランチに上流ブランチがある場合は<code>git fetch &#x3C;remote> &#x3C;branch></code>が実行される．</p>
+</li>
+<li>
+<p>カレントブランチに上流ブランチがない場合は<code>git fetch &#x3C;remote></code>が実行される．</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="特定のコミットをカレントブランチに取り込む">特定のコミットをカレントブランチに取り込む</h1>
+<ul>
+<li>カレントブランチ上で<code>git merge &#x3C;branch></code>すると，<code>&#x3C;branch></code>がカレントブランチに取り込まれ，マージコミットが作られる．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git checkout master &#x26; git merge dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /         \</span></span>
+<span class="line"><span>A---B---C---D---H master</span></span></code></pre>
+<ul>
+<li><code>git merge</code>のように<code>&#x3C;branch></code>を省略すると，カレントブランチの上流ブランチがカレントブランチにマージされる．</li>
+<li>以下のようなマージを，fast-forward（ff,早送り）マージという．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      C---D---E dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git checkout master &#x26; git merge dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      C---D---E dev,master</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B </span></span></code></pre>
+<ul>
+<li><code>git merge --no-commit &#x3C;branch></code>：マージ後にコミットしない</li>
+</ul>
+<h1 id="リモートブランチをカレントブランチに取り込む">リモートブランチをカレントブランチに取り込む</h1>
+<ul>
+<li>カレントブランチで<code>git pull &#x3C;remote> &#x3C;remote branch>:&#x3C;local branch></code>すると，<code>&#x3C;origin></code>の<code>&#x3C;remote branch></code>が<code>&#x3C;local branch></code>に取り込まれる．
+<ul>
+<li><code>git fetch &#x3C;remote> &#x3C;branch> &#x26; git merge &#x3C;remote>/&#x3C;branch></code>をまとめたコマンド．</li>
+<li>リモートブランチ一覧は<code>git branch -r</code>で確認できる．</li>
+</ul>
+</li>
+<li><code>git pull</code>のように<code>&#x3C;remote></code>と<code>&#x3C;branch></code>を省略して実行すると
+<ul>
+<li>カレントブランチに上流ブランチがある場合は，<code>git fetch</code>と<code>git merge</code>のルールが適用される．</li>
+<li>カレントブランチに上流ブランチが無い場合は，<code>git fetch</code>のみ適用される．</li>
+</ul>
+</li>
+</ul>
+<h1 id="特定のコミットに移動する">特定のコミットに移動する</h1>
+<ul>
+<li>コミットに移動する
+<ul>
+<li><code>git checkout &#x3C;commit></code>で，<code>&#x3C;commit></code>に移動する．
+<ul>
+<li><code>&#x3C;commit></code>にブランチ名を指定しないでチェックアウトした先を「無名ブランチ」と呼ぶ．一旦，名無しブランチにrebaseさせたりして様子を見て，大丈夫そうならmasterを名無しブランチにresetさせるというような使い方をする．</li>
+</ul>
+</li>
+<li><code>git chekout -b &#x3C;branch名></code>で，<code>&#x3C;branch名></code>を作成して，<code>&#x3C;branck名></code>に移動する．</li>
+<li>チェックアウトすると，内部的には，オブジェクトからインデックスへのコピーが起こり，そこからワーキングツリーへ書き出すという作業が行われている．</li>
+</ul>
+</li>
+<li>ブランチをつくる
+<ul>
+<li><code>git branch &#x3C;branch名></code>で，<code>&#x3C;branch名></code>を作成する．</li>
+<li><code>git branch &#x3C;branch名> &#x3C;commit></code>で，<code>&#x3C;commit></code>を親にした新たなブランチを作成する．</li>
+</ul>
+</li>
+<li><code>git branch -a</code>で，ブランチ一覧を確認できる．</li>
+<li>ブランチを削除する
+<ul>
+<li><code>git branch -d &#x3C;branch名></code></li>
+</ul>
+</li>
+<li>上流ブランチを変更する
+<ul>
+<li><code>git branch -u &#x3C;remote>/&#x3C;branch> &#x3C;branch></code></li>
+</ul>
+</li>
+<li>あるコミット時のファイルを参照する
+<ul>
+<li><code>git checkout &#x3C;commit> &#x3C;filename></code></li>
+</ul>
+</li>
+</ul>
+<h1 id="カレントブランチの状態を確認する">カレントブランチの状態を確認する</h1>
+<ul>
+<li><code>git status</code>
+<ul>
+<li>カレントブランチの状態を確認できる．
+<ul>
+<li>ワーキングツリーで変更があったもの，ステージングされているもの，トラッキングされていないものなど</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="変更したものをとりあえずひとまとめにする">変更したものをとりあえずひとまとめにする</h1>
+<ul>
+<li><code>git add</code>を実行することで，インデックス（変更されたファイルのスナップショットのようなもの）が内部的につくられる．この動作をステージングという．</li>
+<li><code>git add .</code>
+<ul>
+<li>ワーキングツリーにて新規作成または変更されたファイルをステージング</li>
+</ul>
+</li>
+<li><code>git add -u</code>
+<ul>
+<li>ワーキングツリーにて<code>git rm</code>または変更されたファイルをステージング</li>
+<li>つかいどころ：<code>git rm</code>したときに<code>git add -u</code>する</li>
+</ul>
+</li>
+<li><code>git add -A</code>
+<ul>
+<li><code>git add .</code>と<code>git add -u</code>を合体させたもの</li>
+</ul>
+</li>
+</ul>
+<h1 id="変更を確定する">変更を確定する</h1>
+<ul>
+<li><code>git commit -m &#x3C;message></code>
+<ul>
+<li><code>&#x3C;message></code>というコミットメッセージをつけてコミットする</li>
+</ul>
+</li>
+<li><code>git commit --amend -m 'hogehoge'</code>
+<ul>
+<li>直前のコミットメッセージを変更する</li>
+<li>いくつか前のコミットメッセージを変更したい場合は，<code>git rebase -i</code>で<code>reword</code>を指定する．</li>
+</ul>
+</li>
+</ul>
+<h1 id="あるコミット時点のファイルをみる">あるコミット時点のファイルをみる</h1>
+<ul>
+<li><code>git show &#x3C;commit>:&#x3C;file></code>
+<ul>
+<li>あるコミット時点のあるファイルの中を見る</li>
+</ul>
+</li>
+</ul>
+<h1 id="変更履歴コミットログをみる">変更履歴（コミットログ）をみる</h1>
+<ul>
+<li>
+<p><code>git log &#x3C;branch></code>で<code>&#x3C;branch></code>に属したコミットログをみる</p>
+<ul>
+<li><code>--oneline</code>を指定すると，一行１コミットで表示される．</li>
+<li><code>--graph</code>を指定すると，枝が可視化される．</li>
+</ul>
+</li>
+<li>
+<p><code>git log &#x3C;branch A> &#x3C;branch B></code></p>
+<ul>
+<li>以下のA,B,C,D,E,F,Gを表示する．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G branchB</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D branchA</span></span></code></pre>
+</li>
+<li>
+<p><code>git log &#x3C;branch A>..&#x3C;branch B></code></p>
+<ul>
+<li>以下のE,F,Gを表示する．<code>git diff X..Y</code>とスコープが異なるので注意．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G branchB</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D branchA</span></span></code></pre>
+</li>
+<li>
+<p><code>git log &#x3C;branch A>...&#x3C;branch B></code></p>
+<ul>
+<li>以下のC,D,E,F,Gを表示する．<code>git diff X...Y</code>とスコープが異なるので注意．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G branchB</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D branchA</span></span></code></pre>
+</li>
+<li>
+<p><code>git show-branch &#x3C;branch A> &#x3C;branch B> ..</code></p>
+<ul>
+<li><code>&#x3C;branch A></code>と<code>&#x3C;branch B></code>．．．が交わる根本までのブランチとコミットの対応が表示される．一番下の行が根本．
+<ul>
+<li><code>---</code>より上にあるのが作業ブランチ一覧，ブランチごとにインデントがずれている．</li>
+<li><code>---</code>より下にあるのがブランチとコミット一覧．
+<ul>
+<li><code>*</code>はカレントブランチに属するコミット．</li>
+<li><code>+</code>は，作業ブランチ（<code>---</code>より上に表示されたインデントのズレ）に対応するブランチに属していることを表す．</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="差分をみる">差分をみる</h1>
+<ul>
+<li>
+<p><code>git diff</code></p>
+<ul>
+<li>ワークツリーとインデックスの差分</li>
+</ul>
+</li>
+<li>
+<p><code>git diff &#x3C;target></code></p>
+<ul>
+<li>ワークツリーと<code>&#x3C;target></code>の差分．<code>&#x3C;target></code>にはHEADやHEAD^（HEADの一つ前），コミットのハッシュ値などを指定する．</li>
+</ul>
+</li>
+<li>
+<p><code>git diff &#x3C;source> &#x3C;target></code>または<code>git diff &#x3C;source>..&#x3C;target></code></p>
+<ul>
+<li><code>&#x3C;source></code>と<code>&#x3C;target></code>の差分．HEADやコミット，ブランチ，タグを指定する．</li>
+</ul>
+</li>
+<li>
+<p><code>git diff &#x3C;commit A>...&#x3C;commit B></code></p>
+<ul>
+<li><code>&#x3C;commit A></code>と<code>&#x3C;commit B></code>の共通の親（マージベース）と，<code>&#x3C;commit B></code>との差分が得られる．</li>
+<li>例えば，以下の状態で，<code>git diff G...D</code>を実行すると，BとDの差分が得られる．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span></code></pre>
+<ul>
+<li><code>git diff `git merge-base &#x3C;commitA> &#x3C;commit B>` &#x3C;commit B></code>でも良い．</li>
+</ul>
+</li>
+<li>
+<p><code>git diff --cached(--staged)</code></p>
+<ul>
+<li><code>git add</code>したインデックスとHEADとの差分</li>
+</ul>
+</li>
+<li>
+<p><code>git diff &#x3C;option></code></p>
+<ul>
+<li><code>--name-only</code>：変更されたファイル一覧</li>
+<li><code>-- &#x3C;file></code>：特定のファイルに関してdiffをとる</li>
+<li><code>-w</code>：改行コードや空白を無視する</li>
+<li><code>--ignore-blank-lines</code>：空行を無視する</li>
+</ul>
+</li>
+</ul>
+<h1 id="特定のコミットをカレントブランチに反映させる">特定のコミットをカレントブランチに反映させる</h1>
+<ul>
+<li><code>git cherry-pick &#x3C;commit></code>：<code>&#x3C;commit></code>をカレントブランチに反映させる．
+<ul>
+<li><code>-n</code>を指定することで，カレントブランチのワークツリーとインデックスに<code>&#x3C;commit></code>を持ってくることができる．</li>
+</ul>
+</li>
+</ul>
+<h1 id="枝を付け替える">枝を付け替える</h1>
+<ul>
+<li><code>git rebase</code>は既存のブランチをガッツリ変更してしまうので<code>git push</code>するときは<code>-f</code>オプションをつけて強制的にpushする必要がある．なので，<code>git rebase</code>を好まないプロジェクトもある．</li>
+</ul>
+<h2 id="git-rebase-start-end"><code>git rebase &#x3C;start> &#x3C;end></code></h2>
+<ul>
+<li>
+<p><code>&#x3C;start></code>の次のコミットから<code>&#x3C;end></code>までのコミットを<code>&#x3C;start></code>に移す．</p>
+<ul>
+<li><code>&#x3C;start></code>がブランチ名なら，<code>&#x3C;start></code>の枝と<code>&#x3C;end></code>の枝の共通のコミットの次のコミットから<code>&#x3C;end></code>までのコミットが<code>&#x3C;start></code>に移される．</li>
+</ul>
+</li>
+<li>
+<p><code>&#x3C;end></code>は指定しなくても良い．指定しない場合はカレントブランチが選択される．</p>
+</li>
+<li>
+<p>rebase途中でコンフリクトが起きる場合がある．</p>
+<ul>
+<li>コンフリクトを解消して続ける場合は<code>git rebase --continue</code></li>
+<li>rebaseをやめるには<code>git rebase --abort</code></li>
+</ul>
+</li>
+<li>
+<p>以下はrebaseの内部動作を図示したもの．元のE,F,Gが，Dからの新しいコミットとして順番にcherry-pickされる．親が変わるので，E,F,GのハッシュとE’,F’,G’のハッシュは違うものになる．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git checkout dev &#x26; git rebase master</span></span>
+<span class="line"><span># または</span></span>
+<span class="line"><span># git rebase master dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    E---F---G</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span>             \</span></span>
+<span class="line"><span>              E' dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span>             \</span></span>
+<span class="line"><span>              E'---F' dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span>             \</span></span>
+<span class="line"><span>              E'---F'---G' dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git chekout master &#x26; git merge dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A---B---C---D </span></span>
+<span class="line"><span>             \</span></span>
+<span class="line"><span>              E'---F'---G' dev,master</span></span>
+<span class="line"><span></span></span></code></pre>
+</li>
+</ul>
+<h2 id="git-rebase--i-start-end"><code>git rebase -i &#x3C;start> &#x3C;end></code></h2>
+<ul>
+<li>
+<p>対話モードでrebaseできる．cherry-pick中のコミットについて，細かい操作が行える．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git rebase -i E dev</span></span>
+<span class="line"><span>#</span></span>
+<span class="line"><span># pick F        &#x3C;=== Fは採用</span></span>
+<span class="line"><span># squash G      &#x3C;=== GはFとまとめてしまう</span></span>
+<span class="line"><span>#</span></span>
+<span class="line"><span># p, pick：コミットを採用</span></span>
+<span class="line"><span># r, reword：コミットを採用するが、コミットメッセージを変更</span></span>
+<span class="line"><span># e, edit：コミットを採用するが、ファイルを修正する</span></span>
+<span class="line"><span># s, squash：一個前のコミットと合体させる</span></span>
+<span class="line"><span># f, fixup：コミットメッセージを変更しない点以外、squashと同じ</span></span>
+<span class="line"><span># x, exec：shellでコマンドを実行する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F' dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span></code></pre>
+</li>
+</ul>
+<h2 id="git-rebase---onto-target-start-end"><code>git rebase --onto &#x3C;target> &#x3C;start> &#x3C;end></code></h2>
+<ul>
+<li>
+<p><code>&#x3C;start></code>の次のコミットから<code>&#x3C;end></code>までのコミットを<code>&#x3C;target></code>に持っていく．</p>
+</li>
+<li>
+<p><code>git checkout &#x3C;end> &#x26; git rebase --onto &#x3C;target> &#x3C;start></code>でも良い．</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span>
+<span class="line"><span>           H--I--J dev2</span></span>
+<span class="line"><span>          /</span></span>
+<span class="line"><span>     E---F---G dev</span></span>
+<span class="line"><span>    /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git rebase --onto master F dev2</span></span>
+<span class="line"><span># または</span></span>
+<span class="line"><span># git checkout dev2 &#x26; git rebase --onto master F</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>     E---F---G dev</span></span>
+<span class="line"><span>    /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span>             \</span></span>
+<span class="line"><span>              H'--I'--J' dev2</span></span>
+<span class="line"><span></span></span></code></pre>
+</li>
+</ul>
+<h1 id="特定のブランチをリモート追跡ブランチとリモートブランチに反映する">特定のブランチをリモート追跡ブランチとリモートブランチに反映する</h1>
+<ul>
+<li><code>git push &#x3C;remote> &#x3C;branch></code>
+<ul>
+<li>作業ブランチ<code>&#x3C;branch></code>を，同名のリモート追跡ブランチとリモートブランチに反映する</li>
+<li>コンフリクトが起きたら失敗する．</li>
+</ul>
+</li>
+<li><code>git push &#x3C;remote></code>
+<ul>
+<li><code>&#x3C;branch></code>を省略した場合は，カレントブランチと同名のリモート追跡ブランチとリモートブランチに反映される．</li>
+<li>具体的な設定は<code>push.default</code>に依存する．</li>
+</ul>
+</li>
+<li><code>git push &#x3C;remote> &#x3C;local branch>:&#x3C;remote branch></code>
+<ul>
+<li><code>&#x3C;local branch></code>の最新の状態を<code>&#x3C;remote branch></code>に反映する．</li>
+<li><code>&#x3C;local branch></code>を空にして実行すると，<code>&#x3C;remote branch></code>が削除される．</li>
+</ul>
+</li>
+</ul>
+<h1 id="変更を戻す">変更を戻す</h1>
+<h2 id="git-reset"><code>git reset</code></h2>
+<ul>
+<li><code>git reset</code>には３つのオプションがある
+<ul>
+<li><code>--soft</code> : HEADの位置を変更する</li>
+<li><code>--mixed</code>または指定しない : HEADとインデックスの位置を変更する</li>
+<li><code>--hard</code> : HEADとインデックス，ワーキングツリーの位置を変更する</li>
+</ul>
+</li>
+<li><code>git reset &#x3C;target></code>
+<ul>
+<li><code>&#x3C;target></code>（ファイルやディレクトリ）に対して<code>git reset</code>を実行する</li>
+<li><code>&#x3C;target></code>に<code>.</code>を指定すると，今いるディレクトリ配下のファイルに対して<code>git reset</code>が実行される．</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># 初期状態</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>B &#x3C;- HEAD,インデックス,ワーキングツリー</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># ファイルを修正するとワーキングツリーが進む</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B &#x3C;- HEAD,インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git add により，インデックスが進む</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー,インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B &#x3C;- HEAD </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># ファイルを修正するとワーキングツリーが進む</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>  &#x3C;- インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B &#x3C;- HEAD </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset --soft HEAD</span></span>
+<span class="line"><span># HEADがHEADに移動する（この場合は何も起きない）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>  &#x3C;- インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B &#x3C;- HEAD </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset --soft HEAD^</span></span>
+<span class="line"><span># HEADがHEAD^に移動する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>  &#x3C;- インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A &#x3C;- HEAD </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset HEAD</span></span>
+<span class="line"><span># HEADとインデックスがHEADに移動する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B &#x3C;- HEAD,インデックス</span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset HEAD^</span></span>
+<span class="line"><span># HEADとインデックスがHEAD^に移動する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;- ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>B </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A &#x3C;- HEAD,インデックス</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset --hard HEAD</span></span>
+<span class="line"><span># HEAD，インデックス，ワーキングツリーがすべてHEADに移動する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>B &#x3C;- HEAD,インデックス,ワーキングツリー </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># git reset --hard HEAD^</span></span>
+<span class="line"><span># HEAD，インデックス，ワーキングツリーがすべてHEAD^に移動する</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>B </span></span>
+<span class="line"><span>|</span></span>
+<span class="line"><span>A &#x3C;- HEAD,インデックス,ワーキングツリー </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="git-reflog"><code>git reflog</code></h2>
+<ul>
+<li><code>git reflog</code>
+<ul>
+<li>HEADの移動履歴をみる</li>
+<li><code>git reset --hard &#x3C;commit></code>でそのコミットまで戻る</li>
+</ul>
+</li>
+<li><code>git reflog &#x3C;branch></code>
+* ブランチが指していたコミットの一覧をみる</li>
+</ul>
+<h1 id="コミットにタグを付ける">コミットにタグを付ける</h1>
+<ul>
+<li><code>git tag &#x3C;name> &#x3C;commit></code>
+<ul>
+<li><code>&#x3C;commit></code>に<code>&#x3C;name></code>というタグをつける．<code>&#x3C;commit></code>を省略した場合はカレントブランチが選択される．</li>
+<li>タグを作成したユーザの情報などは保存されない．</li>
+</ul>
+</li>
+<li><code>git tag -a &#x3C;name> &#x3C;commit> -m &#x3C;comment></code>
+<ul>
+<li><code>&#x3C;commit></code>に<code>&#x3C;name></code>という注釈付きタグをつける．<code>&#x3C;commit></code>を省略した場合はカレントブランチが選択される．</li>
+<li>タグを作成したユーザの情報なども保存される．</li>
+</ul>
+</li>
+<li><code>git tag -s &#x3C;name> &#x3C;commit> -m &#x3C;comment></code>
+<ul>
+<li><code>&#x3C;commit></code>に<code>&#x3C;name></code>という署名付きタグをつける．OSSなどにcontributeする際に使うことが多い．</li>
+</ul>
+</li>
+<li><code>git tag -d &#x3C;tag></code>
+<ul>
+<li><code>&#x3C;tag></code>を削除する</li>
+</ul>
+</li>
+<li><code>git show &#x3C;tag></code>
+<ul>
+<li><code>&#x3C;tag></code>がつけられたコミットをみる</li>
+</ul>
+</li>
+<li><code>git push origin &#x3C;tag></code>
+<ul>
+<li><code>&#x3C;tag></code>をpushする．</li>
+<li><code>git push origin --tags</code>で，ローカルの全tagをpushできる．</li>
+</ul>
+</li>
+<li>タグをチェックアウトするのはおすすめしない．
+<ul>
+<li><code>git checkout &#x3C;tag></code>しても，tagに紐付いたcommitをチェックアウトするだけ．</li>
+<li><code>git tag -d</code>で元のタグを消して<code>git tag -a</code>で新しいタグを付けるか，<code>git tag -f -a</code>で強制的に変更する．</li>
+</ul>
+</li>
+</ul>
+<h1 id="ファイルを削除する">ファイルを削除する</h1>
+<ul>
+<li><code>git rm/clean</code>を使わずにファイルを直接消しても問題ない．</li>
+<li><code>git rm &#x3C;target></code>
+<ul>
+<li>インデックスとワークツリーから<code>&#x3C;target></code>（ファイルまたはディレクトリ）を削除する</li>
+<li><code>-r</code>オプションで再帰</li>
+</ul>
+</li>
+<li><code>git rm --cached &#x3C;file></code>
+<ul>
+<li>インデックスから<code>&#x3C;file></code>を削除する</li>
+</ul>
+</li>
+<li><code>git clean -n</code>
+<ul>
+<li>トラックしていないファイル一覧</li>
+</ul>
+</li>
+<li><code>git clean -f</code>
+<ul>
+<li>トラックしていないファイルを削除する</li>
+<li><code>-d</code>オプションでディレクトリも削除</li>
+</ul>
+</li>
+</ul>
+<h1 id="ワークツリーの内容をまるっと取り置きする">ワークツリーの内容をまるっと取り置きする</h1>
+<ul>
+<li><code>git stash</code>または<code>git stash save</code></li>
+<li><code>git stash clear</code>：全stashを削除</li>
+<li><code>git stash list</code>：stashの一覧を表示</li>
+<li><code>git stash list -p</code>：差分を確認</li>
+<li><code>git stash show stash@{X}</code>で，スタッシュされたファイル一覧をみる．</li>
+<li><code>git stash apply stash@{X}</code>でワーキングツリーに戻す．ただしstashには残っている．</li>
+<li><code>git stash drop stash@{X}</code>で特定のstashを削除．</li>
+<li><code>git stash pop stash@{X}</code>でpopする．</li>
+</ul>
+<h1 id="リポジトリに依存関係を持たす">リポジトリに依存関係を持たす</h1>
+<h2 id="あるリポジトリをsubmoduleとして追加する">あるリポジトリをsubmoduleとして追加する</h2>
+<ul>
+<li><code>git submodule add &#x3C;user>@github.com:&#x3C;repository>.git &#x3C;directory></code>
+<ul>
+<li><code>&#x3C;directory>/</code>に<code>&#x3C;repository></code>へのリンクが追加される．</li>
+<li>これにより，<code>.gitmodule</code>が作成され，どのリポジトリに依存しているかなどの情報が保持される．</li>
+</ul>
+</li>
+<li><code>git submodule</code>
+<ul>
+<li>submoduleを確認することができる．</li>
+</ul>
+</li>
+</ul>
+<h2 id="submoduleを持っているrepositoryをcloneする">submoduleを持っているrepositoryをcloneする</h2>
+<ul>
+<li><code>.gitmodule</code>が埋め込まれたrepositoryをcloneしても，submoduleは自動でcloneされない．</li>
+<li><code>git submodule update -i</code>
+<ul>
+<li>submoduleをclone/updateしてくれる．<code>-i</code>は，initとupdateを一括で行うためのオプション．</li>
+</ul>
+</li>
+<li><code>git submodule deinit</code>
+<ul>
+<li>submoduleとの依存を切ることができる．<code>git submodule</code>で”-“がついているものは依存が切れている．</li>
+</ul>
+</li>
+<li><code>git rm &#x3C;submodule名></code>
+<ul>
+<li><code>.gitmodule</code>からsubmodule情報が消え，submoduleも消える．</li>
+</ul>
+</li>
+</ul>
+<h1 id="そもそもgitはどのように差分を管理しているか">そもそもGitはどのように差分を管理しているか</h1>
+<h2 id="blobtreecommitオブジェクトを関連付けて差分管理している">blob/tree/commitオブジェクトを関連付けて差分管理している</h2>
+<ul>
+<li>blobオブジェクト
+<ul>
+<li>treeの子．ファイルの中身を保持している．</li>
+<li><code>git hash-object &#x3C;filename></code>：<code>&#x3C;filename></code>からハッシュ値を生成できる
+<ul>
+<li>ファイルサイズとファイル内容からSHA-1でハッシュ値を計算している．</li>
+</ul>
+</li>
+<li>あるローカルリポジトリ内で，
+<ul>
+<li><code>git cat-file -t &#x3C;hash></code>：<code>&#x3C;hash></code>で指定したものがblobなのかtreeなのかcommitなのかを確認できる．</li>
+<li><code>git cat-file blob &#x3C;hash></code>：<code>&#x3C;hash></code>に対応したファイルの内容を見ることができる．</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>treeオブジェクト
+<ul>
+<li>blobの親．ファイル名や作成日時などのメタデータを保持している．</li>
+<li><code>git cat-file -p &#x3C;hash of tree></code>：ツリーにぶら下がっていblob/tree一覧を確認できる．
+<ul>
+<li><code>git cat-file -p &#x3C;branch>^{tree}</code>：<code>&#x3C;branch></code>が参照しているツリーオブジェクトを見る．</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>commitオブジェクト
+<ul>
+<li><code>git cat-file commit &#x3C;hash of commit></code>：treeやparentを確認できる．</li>
+</ul>
+</li>
+<li><code>git ls-tree &#x3C;commit></code>：<code>&#x3C;commit></code>でリポジトリに追加されたblob/tree一覧を確認できる</li>
+<li><code>git rev-parse &#x3C;commit></code>：<code>&#x3C;commit></code>自体のtreeのhashを確認できる．</li>
+<li><code>find .git/objects -type f</code>：blob/tree/commitの実体．<code>git show</code>で見れるのはこれ．</li>
+</ul>
+<h2 id="git-addとgit-commitで何をやっているか"><code>git add</code>と<code>git commit</code>で何をやっているか</h2>
+<ol>
+<li><code>echo hoge > hoge.txt &#x26; echo hoge > hoge.txt &#x26; git add hoge.txt</code></li>
+<li><code>git ls-files --stage</code>
+<ul>
+<li>インデックスされたファイルのblob一覧が表示される</li>
+</ul>
+</li>
+<li><code>git write-tree</code>
+<ul>
+<li>blobをまとめたtreeが作られ，そのtreeのハッシュが表示される．</li>
+</ul>
+</li>
+<li><code>echo "first commit" | git commit-tree &#x3C;git write-treeのハッシュ></code>
+<ul>
+<li><code>git write-tree</code>で作られたtreeをまとめたcommitをつくる</li>
+</ul>
+</li>
+<li><code>echo &#x3C;git commit-treeのハッシュ> > .git/refs/heads/master</code>または<code>git update-ref</code>
+<ul>
+<li>masterブランチが<code>git commit-tree</code>のハッシュを指すようにする</li>
+</ul>
+</li>
+<li><code>git symbolic-ref HEAD refs/heads/master</code>
+<ul>
+<li>HEADがmasterブランチを指すようにする．</li>
+</ul>
+</li>
+<li>コミット完了</li>
+</ol>
+<h2 id="通常のコミットとマージコミットの違い">通常のコミットとマージコミットの違い</h2>
+<ul>
+<li><code>git cat-file -p &#x3C;commit></code>で通常のコミットを見ると，parentを一つ持っていることがわかる．一方，マージコミットでは，parentを２つ持っている．１つ目のparentはマージ先のコミットを指し，２つ目のparentはマージ元のコミットを指している．</li>
+<li>マージを元に戻すときは<code>git reset --hard ORIG_HEAD</code>をおすすめする．<code>git reset --hard HEAD^</code>だと，以下のような現象が起こる．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git checkout dev &#x26; git merge master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F---G---I dev</span></span>
+<span class="line"><span>     /           /</span></span>
+<span class="line"><span>A---B---C---D---H master</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git checkout master &#x26; git merge dev</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F---G---I dev,master &#x3C;=== fast-forward merge...</span></span>
+<span class="line"><span>     /           /</span></span>
+<span class="line"><span>A---B---C---D---H </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git reset --hard HEAD^</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F---G dev</span></span>
+<span class="line"><span>     /</span></span>
+<span class="line"><span>A---B---C---D master</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>fast-forward mergeにより，HEADがdevとmasterを指してしまっていることが原因．<code>git reset --hard ORIG_HEAD</code>で，チェックアウトしているブランチの直前のHEAD(ORIG_HEAD)にリセットすることで，期待通りの動作が行える．</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>      E---F---G---I dev,master</span></span>
+<span class="line"><span>     /           /</span></span>
+<span class="line"><span>A---B---C---D---H </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>git reset --hard ORIG_HEAD</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>      E---F---G---I dev</span></span>
+<span class="line"><span>     /           /</span></span>
+<span class="line"><span>A---B---C---D---H master</span></span>
+<span class="line"><span></span></span></code></pre>  </div> </article> <div id="mobile-share-sentinel" class="xl:hidden h-px"></div> <div id="mobile-share-anchor" class="xl:hidden hidden justify-center gap-4 py-4"> <a href="https://twitter.com/intent/tweet?text=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F&amp;title=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </div> <!-- 関連記事 -->  </div> <!-- 右: 追従する目次 (lg以上) --> <aside class="hidden lg:block w-56 shrink-0"> <div class="sticky top-24"> <nav aria-label="目次" id="toc-sidebar" class="text-sm"><p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#モチベーション" data-slug="モチベーション" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">モチベーション</a></li><li style="padding-left: 0rem"><a href="#repositoryを用意する" data-slug="repositoryを用意する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Repositoryを用意する</a></li><li style="padding-left: 0.75rem"><a href="#ローカルリポジトリから始める" data-slug="ローカルリポジトリから始める" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ローカルリポジトリから始める</a></li><li style="padding-left: 0.75rem"><a href="#リモートリポジトリから始める" data-slug="リモートリポジトリから始める" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">リモートリポジトリから始める</a></li><li style="padding-left: 0rem"><a href="#repositoryの初期設定をする" data-slug="repositoryの初期設定をする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Repositoryの初期設定をする</a></li><li style="padding-left: 0.75rem"><a href="#ユーザ情報を設定する" data-slug="ユーザ情報を設定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ユーザ情報を設定する</a></li><li style="padding-left: 0.75rem"><a href="#デフォルトのエディタやmerge-tool-diff-toolを設定する" data-slug="デフォルトのエディタやmerge-tool-diff-toolを設定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">デフォルトのエディタやMerge tool, Diff toolを設定する</a></li><li style="padding-left: 0.75rem"><a href="#オリジナルのサブコマンドを設定する" data-slug="オリジナルのサブコマンドを設定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">オリジナルのサブコマンドを設定する</a></li><li style="padding-left: 0.75rem"><a href="#設定値の確認" data-slug="設定値の確認" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">設定値の確認</a></li><li style="padding-left: 0.75rem"><a href="#gitで管理したくないファイルを指定する" data-slug="gitで管理したくないファイルを指定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Gitで管理したくないファイルを指定する</a></li><li style="padding-left: 0rem"><a href="#リモートリポジトリにはニックネームが付いている" data-slug="リモートリポジトリにはニックネームが付いている" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">リモートリポジトリにはニックネームが付いている</a></li><li style="padding-left: 0rem"><a href="#githubのレポジトリにhttpsではなくsshを使ってアクセスするように変更する" data-slug="githubのレポジトリにhttpsではなくsshを使ってアクセスするように変更する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">GitHubのレポジトリにHTTPSではなくSSHを使ってアクセスするように変更する</a></li><li style="padding-left: 0rem"><a href="#コミットのいろいろな呼ばれ方" data-slug="コミットのいろいろな呼ばれ方" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">コミットのいろいろな呼ばれ方</a></li><li style="padding-left: 0rem"><a href="#ブランチのいろいろな呼ばれ方" data-slug="ブランチのいろいろな呼ばれ方" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ブランチのいろいろな呼ばれ方</a></li><li style="padding-left: 0rem"><a href="#リモートブランチをリモート追跡ブランチに取り込む" data-slug="リモートブランチをリモート追跡ブランチに取り込む" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">リモートブランチをリモート追跡ブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#特定のコミットをカレントブランチに取り込む" data-slug="特定のコミットをカレントブランチに取り込む" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">特定のコミットをカレントブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#リモートブランチをカレントブランチに取り込む" data-slug="リモートブランチをカレントブランチに取り込む" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">リモートブランチをカレントブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#特定のコミットに移動する" data-slug="特定のコミットに移動する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">特定のコミットに移動する</a></li><li style="padding-left: 0rem"><a href="#カレントブランチの状態を確認する" data-slug="カレントブランチの状態を確認する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">カレントブランチの状態を確認する</a></li><li style="padding-left: 0rem"><a href="#変更したものをとりあえずひとまとめにする" data-slug="変更したものをとりあえずひとまとめにする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">変更したものをとりあえずひとまとめにする</a></li><li style="padding-left: 0rem"><a href="#変更を確定する" data-slug="変更を確定する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">変更を確定する</a></li><li style="padding-left: 0rem"><a href="#あるコミット時点のファイルをみる" data-slug="あるコミット時点のファイルをみる" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">あるコミット時点のファイルをみる</a></li><li style="padding-left: 0rem"><a href="#変更履歴コミットログをみる" data-slug="変更履歴コミットログをみる" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">変更履歴（コミットログ）をみる</a></li><li style="padding-left: 0rem"><a href="#差分をみる" data-slug="差分をみる" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">差分をみる</a></li><li style="padding-left: 0rem"><a href="#特定のコミットをカレントブランチに反映させる" data-slug="特定のコミットをカレントブランチに反映させる" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">特定のコミットをカレントブランチに反映させる</a></li><li style="padding-left: 0rem"><a href="#枝を付け替える" data-slug="枝を付け替える" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">枝を付け替える</a></li><li style="padding-left: 0.75rem"><a href="#git-rebase-start-end" data-slug="git-rebase-start-end" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git rebase &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 0.75rem"><a href="#git-rebase--i-start-end" data-slug="git-rebase--i-start-end" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git rebase -i &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 0.75rem"><a href="#git-rebase---onto-target-start-end" data-slug="git-rebase---onto-target-start-end" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git rebase --onto &lt;target&gt; &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 0rem"><a href="#特定のブランチをリモート追跡ブランチとリモートブランチに反映する" data-slug="特定のブランチをリモート追跡ブランチとリモートブランチに反映する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">特定のブランチをリモート追跡ブランチとリモートブランチに反映する</a></li><li style="padding-left: 0rem"><a href="#変更を戻す" data-slug="変更を戻す" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">変更を戻す</a></li><li style="padding-left: 0.75rem"><a href="#git-reset" data-slug="git-reset" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git reset</a></li><li style="padding-left: 0.75rem"><a href="#git-reflog" data-slug="git-reflog" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git reflog</a></li><li style="padding-left: 0rem"><a href="#コミットにタグを付ける" data-slug="コミットにタグを付ける" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">コミットにタグを付ける</a></li><li style="padding-left: 0rem"><a href="#ファイルを削除する" data-slug="ファイルを削除する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ファイルを削除する</a></li><li style="padding-left: 0rem"><a href="#ワークツリーの内容をまるっと取り置きする" data-slug="ワークツリーの内容をまるっと取り置きする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ワークツリーの内容をまるっと取り置きする</a></li><li style="padding-left: 0rem"><a href="#リポジトリに依存関係を持たす" data-slug="リポジトリに依存関係を持たす" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">リポジトリに依存関係を持たす</a></li><li style="padding-left: 0.75rem"><a href="#あるリポジトリをsubmoduleとして追加する" data-slug="あるリポジトリをsubmoduleとして追加する" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">あるリポジトリをsubmoduleとして追加する</a></li><li style="padding-left: 0.75rem"><a href="#submoduleを持っているrepositoryをcloneする" data-slug="submoduleを持っているrepositoryをcloneする" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">submoduleを持っているrepositoryをcloneする</a></li><li style="padding-left: 0rem"><a href="#そもそもgitはどのように差分を管理しているか" data-slug="そもそもgitはどのように差分を管理しているか" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">そもそもGitはどのように差分を管理しているか</a></li><li style="padding-left: 0.75rem"><a href="#blobtreecommitオブジェクトを関連付けて差分管理している" data-slug="blobtreecommitオブジェクトを関連付けて差分管理している" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">blob/tree/commitオブジェクトを関連付けて差分管理している</a></li><li style="padding-left: 0.75rem"><a href="#git-addとgit-commitで何をやっているか" data-slug="git-addとgit-commitで何をやっているか" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">git addとgit commitで何をやっているか</a></li><li style="padding-left: 0.75rem"><a href="#通常のコミットとマージコミットの違い" data-slug="通常のコミットとマージコミットの違い" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">通常のコミットとマージコミットの違い</a></li></ol></nav>
+
+  <script type="module">const n=document.getElementById("toc-sidebar");if(n){const o=n.querySelectorAll(".toc-link"),i=t=>{o.forEach(e=>{const s=e.dataset.slug===t;e.classList.toggle("text-foreground",s),e.classList.toggle("font-medium",s),e.classList.toggle("text-muted-foreground",!s)})},r=[...o].map(t=>document.getElementById(t.dataset.slug)).filter(t=>t!==null),c=new IntersectionObserver(t=>{const e=t.filter(s=>s.isIntersecting);e.length>0&&i(e[0].target.id)},{rootMargin:"-80px 0px -60% 0px"});r.forEach(t=>c.observe(t))}</script><script type="module">if(!document.documentElement.dataset.tocBilingualReady){let a=function(){const e=document.documentElement.dataset.lang??"ja";document.querySelectorAll("a.toc-entry[data-lang-ja]").forEach(t=>{t.textContent=e==="en"?t.dataset.langEn??"":t.dataset.langJa??""})},l=function(){document.querySelectorAll("a.toc-entry[data-slug]").forEach(e=>{const t=document.getElementById(e.dataset.slug);if(!t)return;const n=t.querySelector(".lang-ja"),o=t.querySelector(".lang-en");n&&o&&(e.dataset.langJa=n.textContent??"",e.dataset.langEn=o.textContent??"")}),a()};document.documentElement.dataset.tocBilingualReady="1",l(),new MutationObserver(a).observe(document.documentElement,{attributes:!0,attributeFilter:["data-lang"]})}</script> </div> </aside> </div> </div> </main>  <aside id="pc-share-aside" class="hidden xl:flex fixed flex-col items-center gap-3 z-10" style="left: max(8px, calc(50vw - 584px)); top: 0px;"> <a href="https://twitter.com/intent/tweet?text=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F&amp;title=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </aside>  <div id="mobile-share-bar" class="xl:hidden fixed bottom-0 left-0 right-0 z-40 translate-y-full transition-transform duration-300 ease-in-out"> <div class="px-6 py-3 flex items-center justify-center gap-4"> <a href="https://twitter.com/intent/tweet?text=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-black text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877f2] text-white hover:opacity-75 transition-opacity"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/add?mode=confirm&amp;url=http%3A%2F%2Flocalhost%3A4321%2Fblog%2Fhow-to-use-git%2F&amp;title=Git%E3%82%92%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#00a4de] text-white hover:opacity-75 transition-opacity font-bold text-xs">
+B!
+</a> </div> </div> <script>
+    (function () {
+      var bar      = document.getElementById('mobile-share-bar');
+      var anchor   = document.getElementById('mobile-share-anchor');
+      var sentinel = document.getElementById('mobile-share-sentinel');
+      if (!bar || !anchor || !sentinel) return;
+
+      var lastY     = window.scrollY;
+      var threshold = 80;
+      var atEnd     = false;
+
+      // display:none の anchor ではなく常に DOM にある sentinel を監視
+      var observer = new IntersectionObserver(function (entries) {
+        atEnd = entries[0].isIntersecting;
+        if (atEnd) {
+          bar.classList.add('translate-y-full');
+          anchor.classList.remove('hidden');
+          anchor.classList.add('flex');
+        } else {
+          anchor.classList.add('hidden');
+          anchor.classList.remove('flex');
+        }
+      }, { threshold: 0 });
+      observer.observe(sentinel);
+
+      window.addEventListener('scroll', function () {
+        if (atEnd) { lastY = window.scrollY; return; }
+        var currentY = window.scrollY;
+        if (currentY > lastY && currentY > threshold) {
+          bar.classList.remove('translate-y-full');
+        } else {
+          bar.classList.add('translate-y-full');
+        }
+        lastY = currentY;
+      }, { passive: true });
+    })();
+  </script> <script>
+    (function () {
+      var aside   = document.getElementById('pc-share-aside');
+      var article = document.getElementById('article-body');
+      if (!aside || !article) return;
+      var STICKY_TOP = 96; // top-24 = 6rem
+
+      function update() {
+        var top = Math.max(article.getBoundingClientRect().top, STICKY_TOP);
+        aside.style.top = top + 'px';
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>   <button id="toc-toggle" aria-label="目次を開く" class="lg:hidden fixed top-[4.5rem] right-4 z-40 flex items-center gap-1.5 bg-background border border-border rounded-full px-3 py-1.5 text-xs font-medium shadow-sm hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="15" y2="12"></line><line x1="3" y1="18" x2="9" y2="18"></line> </svg> <span class="lang-ja">目次</span> <span class="lang-en">Contents</span> </button>  <div id="toc-drawer" class="lg:hidden fixed inset-0 z-50 invisible opacity-0 transition-all duration-200"> <!-- オーバーレイ --> <div id="toc-overlay" class="absolute inset-0 bg-black/40"></div> <!-- パネル --> <div id="toc-panel" class="absolute right-0 top-0 h-full w-72 max-w-[85vw] bg-background shadow-xl translate-x-full transition-transform duration-200 overflow-y-auto"> <div class="flex items-center justify-between px-5 py-4 border-b border-border"> <button id="toc-close" aria-label="閉じる" class="p-1 rounded hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line> </svg> </button> </div> <div class="px-5 py-4"> <nav aria-label="目次" class="rounded-lg border border-border bg-muted/40 px-6 py-5 mb-10 text-sm"><p class="font-semibold mb-3 text-foreground"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1.5 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#モチベーション" data-slug="モチベーション" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">モチベーション</a></li><li style="padding-left: 0rem"><a href="#repositoryを用意する" data-slug="repositoryを用意する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Repositoryを用意する</a></li><li style="padding-left: 1rem"><a href="#ローカルリポジトリから始める" data-slug="ローカルリポジトリから始める" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ローカルリポジトリから始める</a></li><li style="padding-left: 1rem"><a href="#リモートリポジトリから始める" data-slug="リモートリポジトリから始める" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">リモートリポジトリから始める</a></li><li style="padding-left: 0rem"><a href="#repositoryの初期設定をする" data-slug="repositoryの初期設定をする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Repositoryの初期設定をする</a></li><li style="padding-left: 1rem"><a href="#ユーザ情報を設定する" data-slug="ユーザ情報を設定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ユーザ情報を設定する</a></li><li style="padding-left: 1rem"><a href="#デフォルトのエディタやmerge-tool-diff-toolを設定する" data-slug="デフォルトのエディタやmerge-tool-diff-toolを設定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">デフォルトのエディタやMerge tool, Diff toolを設定する</a></li><li style="padding-left: 1rem"><a href="#オリジナルのサブコマンドを設定する" data-slug="オリジナルのサブコマンドを設定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">オリジナルのサブコマンドを設定する</a></li><li style="padding-left: 1rem"><a href="#設定値の確認" data-slug="設定値の確認" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">設定値の確認</a></li><li style="padding-left: 1rem"><a href="#gitで管理したくないファイルを指定する" data-slug="gitで管理したくないファイルを指定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Gitで管理したくないファイルを指定する</a></li><li style="padding-left: 0rem"><a href="#リモートリポジトリにはニックネームが付いている" data-slug="リモートリポジトリにはニックネームが付いている" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">リモートリポジトリにはニックネームが付いている</a></li><li style="padding-left: 0rem"><a href="#githubのレポジトリにhttpsではなくsshを使ってアクセスするように変更する" data-slug="githubのレポジトリにhttpsではなくsshを使ってアクセスするように変更する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">GitHubのレポジトリにHTTPSではなくSSHを使ってアクセスするように変更する</a></li><li style="padding-left: 0rem"><a href="#コミットのいろいろな呼ばれ方" data-slug="コミットのいろいろな呼ばれ方" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">コミットのいろいろな呼ばれ方</a></li><li style="padding-left: 0rem"><a href="#ブランチのいろいろな呼ばれ方" data-slug="ブランチのいろいろな呼ばれ方" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ブランチのいろいろな呼ばれ方</a></li><li style="padding-left: 0rem"><a href="#リモートブランチをリモート追跡ブランチに取り込む" data-slug="リモートブランチをリモート追跡ブランチに取り込む" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">リモートブランチをリモート追跡ブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#特定のコミットをカレントブランチに取り込む" data-slug="特定のコミットをカレントブランチに取り込む" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">特定のコミットをカレントブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#リモートブランチをカレントブランチに取り込む" data-slug="リモートブランチをカレントブランチに取り込む" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">リモートブランチをカレントブランチに取り込む</a></li><li style="padding-left: 0rem"><a href="#特定のコミットに移動する" data-slug="特定のコミットに移動する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">特定のコミットに移動する</a></li><li style="padding-left: 0rem"><a href="#カレントブランチの状態を確認する" data-slug="カレントブランチの状態を確認する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">カレントブランチの状態を確認する</a></li><li style="padding-left: 0rem"><a href="#変更したものをとりあえずひとまとめにする" data-slug="変更したものをとりあえずひとまとめにする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">変更したものをとりあえずひとまとめにする</a></li><li style="padding-left: 0rem"><a href="#変更を確定する" data-slug="変更を確定する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">変更を確定する</a></li><li style="padding-left: 0rem"><a href="#あるコミット時点のファイルをみる" data-slug="あるコミット時点のファイルをみる" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">あるコミット時点のファイルをみる</a></li><li style="padding-left: 0rem"><a href="#変更履歴コミットログをみる" data-slug="変更履歴コミットログをみる" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">変更履歴（コミットログ）をみる</a></li><li style="padding-left: 0rem"><a href="#差分をみる" data-slug="差分をみる" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">差分をみる</a></li><li style="padding-left: 0rem"><a href="#特定のコミットをカレントブランチに反映させる" data-slug="特定のコミットをカレントブランチに反映させる" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">特定のコミットをカレントブランチに反映させる</a></li><li style="padding-left: 0rem"><a href="#枝を付け替える" data-slug="枝を付け替える" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">枝を付け替える</a></li><li style="padding-left: 1rem"><a href="#git-rebase-start-end" data-slug="git-rebase-start-end" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git rebase &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 1rem"><a href="#git-rebase--i-start-end" data-slug="git-rebase--i-start-end" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git rebase -i &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 1rem"><a href="#git-rebase---onto-target-start-end" data-slug="git-rebase---onto-target-start-end" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git rebase --onto &lt;target&gt; &lt;start&gt; &lt;end&gt;</a></li><li style="padding-left: 0rem"><a href="#特定のブランチをリモート追跡ブランチとリモートブランチに反映する" data-slug="特定のブランチをリモート追跡ブランチとリモートブランチに反映する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">特定のブランチをリモート追跡ブランチとリモートブランチに反映する</a></li><li style="padding-left: 0rem"><a href="#変更を戻す" data-slug="変更を戻す" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">変更を戻す</a></li><li style="padding-left: 1rem"><a href="#git-reset" data-slug="git-reset" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git reset</a></li><li style="padding-left: 1rem"><a href="#git-reflog" data-slug="git-reflog" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git reflog</a></li><li style="padding-left: 0rem"><a href="#コミットにタグを付ける" data-slug="コミットにタグを付ける" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">コミットにタグを付ける</a></li><li style="padding-left: 0rem"><a href="#ファイルを削除する" data-slug="ファイルを削除する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ファイルを削除する</a></li><li style="padding-left: 0rem"><a href="#ワークツリーの内容をまるっと取り置きする" data-slug="ワークツリーの内容をまるっと取り置きする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ワークツリーの内容をまるっと取り置きする</a></li><li style="padding-left: 0rem"><a href="#リポジトリに依存関係を持たす" data-slug="リポジトリに依存関係を持たす" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">リポジトリに依存関係を持たす</a></li><li style="padding-left: 1rem"><a href="#あるリポジトリをsubmoduleとして追加する" data-slug="あるリポジトリをsubmoduleとして追加する" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">あるリポジトリをsubmoduleとして追加する</a></li><li style="padding-left: 1rem"><a href="#submoduleを持っているrepositoryをcloneする" data-slug="submoduleを持っているrepositoryをcloneする" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">submoduleを持っているrepositoryをcloneする</a></li><li style="padding-left: 0rem"><a href="#そもそもgitはどのように差分を管理しているか" data-slug="そもそもgitはどのように差分を管理しているか" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">そもそもGitはどのように差分を管理しているか</a></li><li style="padding-left: 1rem"><a href="#blobtreecommitオブジェクトを関連付けて差分管理している" data-slug="blobtreecommitオブジェクトを関連付けて差分管理している" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">blob/tree/commitオブジェクトを関連付けて差分管理している</a></li><li style="padding-left: 1rem"><a href="#git-addとgit-commitで何をやっているか" data-slug="git-addとgit-commitで何をやっているか" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">git addとgit commitで何をやっているか</a></li><li style="padding-left: 1rem"><a href="#通常のコミットとマージコミットの違い" data-slug="通常のコミットとマージコミットの違い" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">通常のコミットとマージコミットの違い</a></li></ol></nav> </div> </div> </div> <script>
+        var btn    = document.getElementById('toc-toggle');
+        var drawer = document.getElementById('toc-drawer');
+        var panel  = document.getElementById('toc-panel');
+        var overlay = document.getElementById('toc-overlay');
+        var close  = document.getElementById('toc-close');
+
+        function openDrawer() {
+          drawer.classList.remove('invisible', 'opacity-0');
+          setTimeout(function() { panel.classList.remove('translate-x-full'); }, 10);
+        }
+        function closeDrawer() {
+          panel.classList.add('translate-x-full');
+          drawer.classList.add('opacity-0');
+          setTimeout(function() { drawer.classList.add('invisible'); }, 200);
+        }
+
+        btn.addEventListener('click', openDrawer);
+        close.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // 目次リンクをタップしたら閉じる
+        drawer.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', closeDrawer);
+        });
+      </script> <footer class="border-t border-border mt-20"> <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"> <p>&copy; 2026 yasakura. All rights reserved.</p> <nav aria-label="フッターナビゲーション"> <ul class="flex items-center gap-6 list-none m-0 p-0"> <li> <a href="/site-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">サイトポリシー</span> <span class="lang-en">Site Policy</span> </a> </li> <li> <a href="/privacy-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">プライバシーポリシー</span> <span class="lang-en">Privacy Policy</span> </a> </li> </ul> </nav> </div> </footer>  <div id="search-modal" class="fixed inset-0 z-[60] invisible opacity-0 transition-all duration-150"> <div class="absolute inset-0 bg-black/50"></div> <div class="relative z-10 max-w-xl mx-auto mt-24 px-4"> <div class="bg-background rounded-xl shadow-2xl border border-border overflow-hidden"> <div class="flex items-center gap-3 px-4 py-3 border-b border-border"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> <input id="search-input" type="text" placeholder="記事を検索..." data-placeholder-ja="記事を検索..." data-placeholder-en="Search articles..." autocomplete="off" class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"> <kbd class="hidden sm:inline-flex text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">Esc</kbd> </div> <ul id="search-results" class="max-h-80 overflow-y-auto py-2 list-none m-0 p-0"></ul> <p id="search-empty" class="hidden text-sm text-muted-foreground text-center py-8"> <span class="lang-ja">記事が見つかりませんでした</span> <span class="lang-en">No articles found</span> </p> </div> </div> </div> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.BR7VHDYB.js"></script> </body></html>
