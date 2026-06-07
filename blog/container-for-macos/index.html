@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><meta name="generator" content="Astro v6.4.2"><title>macOSでコンテナを動作させる３つのパターン</title><meta name="google-site-verification" content="SdJ-T7AYgGXniBfEIVK9EZqTk9tan2DCY7p1RavhFwI"><!-- フラッシュ防止: レンダリング前にテーマ・言語を適用 --><script>
+      const theme = localStorage.getItem('theme') ??
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const systemLang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+      document.documentElement.dataset.lang = localStorage.getItem('lang') ?? systemLang;
+    </script><link rel="stylesheet" href="/_astro/Footer.BC4yMGvc.css"></head> <body>  <header class="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50"> <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between"> <div class="flex items-center gap-2"> <a href="/" class="font-black text-xl tracking-tight leading-none h-8 flex items-center hover:opacity-80 transition-opacity"> yasakura </a> <a href="/about" class="text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
+About
+</a> </div> <div class="flex items-center gap-2"> <button id="search-btn" aria-label="検索" class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> </button> <button id="theme-toggle" aria-label="テーマを切り替える" class="flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"> <!-- 太陽: ライトモード時に表示 --> <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path> </svg> <!-- 月: ダークモード時に表示 --> <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path> </svg> </button> <script type="module">const o=document.getElementById("theme-toggle"),c=document.getElementById("icon-sun"),s=document.getElementById("icon-moon");function n(e){const t=e==="dark";document.documentElement.classList.toggle("dark",t),c?.classList.toggle("hidden",!t),s?.classList.toggle("hidden",t)}const d=document.documentElement.classList.contains("dark")?"dark":"light";n(d);o?.addEventListener("click",()=>{const e=document.documentElement.classList.contains("dark")?"light":"dark";localStorage.setItem("theme",e),n(e)});window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{localStorage.getItem("theme")||n(e.matches?"dark":"light")});</script> <button id="lang-toggle" aria-label="言語切り替え" class="flex items-center gap-1 h-8 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-xs font-bold tabular-nums"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path> </svg> <span id="lang-label">JP</span> </button> </div> </div> </header> <script type="module">document.getElementById("search-btn")?.addEventListener("click",()=>{document.dispatchEvent(new CustomEvent("open-search"))});const n=document.getElementById("lang-toggle"),t=document.getElementById("lang-label");function a(e){document.documentElement.dataset.lang=e,t&&(t.textContent=e==="en"?"EN":"JP")}document.querySelector(".lang-ja, .lang-en")||n?.classList.add("hidden");a(document.documentElement.dataset.lang??"ja");n?.addEventListener("click",()=>{const e=document.documentElement.dataset.lang==="en"?"ja":"en";localStorage.setItem("lang",e),a(e)});</script> <main> <!-- パンくず --> <div class="max-w-5xl mx-auto px-6 pt-10"> <nav aria-label="パンくずリスト"> <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground list-none m-0 p-0"> <li class="flex items-center gap-1">  <a href="/" class="hover:text-foreground transition-colors"> Home </a> </li><li class="flex items-center gap-1"> <span aria-hidden="true">/</span> <span class="text-foreground"> macOSでコンテナを動作させる３つのパターン </span> </li> </ol> </nav> </div> <!-- タイトル: 全幅 --> <header class="mt-8 py-12"> <div class="max-w-5xl mx-auto px-6"> <!-- 日付: 左寄せ・タイトル上 --> <div class="flex justify-center items-center gap-x-5 text-sm text-muted-foreground mb-3"> <time datetime="2026-06-07T00:00:00.000Z"> 2026/06/07 </time>  </div> <!-- タイトル: 中央寄せ --> <h1 class="text-4xl font-bold leading-tight my-6 text-center"> macOSでコンテナを動作させる３つのパターン </h1> <!-- X アカウント --> <div class="flex justify-center mt-4"> <a href="https://x.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg>
+@yasakurara </a> </div> <!-- GitHub アカウント --> <div class="flex justify-center mt-2"> <a href="https://github.com/yasakurara" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+@yasakurara </a> </div> <!-- タグ: 中央寄せ・タイトル下 --> <div class="flex flex-wrap justify-center gap-1.5 mt-4"> <a href="/tags/macOS" class="border border-border rounded-full px-3 py-1 text-xs text-muted-foreground hover:bg-muted transition-colors"> macOS </a><a href="/tags/container" class="border border-border rounded-full px-3 py-1 text-xs text-muted-foreground hover:bg-muted transition-colors"> container </a> </div> </div> </header> <!-- 本文エリア --> <div class="max-w-5xl mx-auto px-6 py-10"> <div class="flex gap-12"> <!-- 中: 記事本文 --> <div class="flex-1 min-w-0"> <article id="article-body"> <!-- 本文 --> <div class="prose prose-zinc dark:prose-invert max-w-none
+            prose-headings:scroll-mt-24
+            prose-h1:mt-10 [&_h1:first-of-type]:mt-0
+            prose-a:text-foreground prose-a:underline-offset-4
+            prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+            prose-pre:rounded-lg prose-pre:border prose-pre:border-border prose-pre:overflow-x-auto
+            [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit
+          ">  <p>macOS上でコンテナを動作させるには３つのパターンがある。</p>
+<h1 id="コンテナを動作させる３つのパターン">コンテナを動作させる３つのパターン</h1>
+<h2 id="docker-desktopのみのパターン">Docker Desktopのみのパターン</h2>
+<p>Docker DesktopがVMの管理をし、VM内でdockerdデーモンを動作させる。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Docker CLI</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Docker Desktop</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Apple Virtualization Framework (AVF)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Linux VM</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>dockerd</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>containerd</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>OCI runtime (runcなど)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>コンテナプロセス</span></span></code></pre>
+<h2 id="colima-と-docker-daemon-を組み合わせるパターン">Colima と Docker daemon を組み合わせるパターン</h2>
+<p>Colima(Lima)がVMの管理をし、VM内ではdockerdデーモンを動作させる。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Docker CLI</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Colima</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Lima</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Apple Virtualization Framework (AVF)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Linux VM</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>dockerd</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>containerd</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>OCI runtime (runcなど)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>コンテナプロセス</span></span></code></pre>
+<h2 id="podmanのみのパターン">Podman　のみのパターン</h2>
+<p>PodmanがVMの管理をし、Podmanが直接OCI runtimeを利用する。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Podman CLI</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Podman Machine</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Apple Virtualization Framework (AVF)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Linux VM</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>Podman</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>OCI runtime (runcなど)</span></span>
+<span class="line"><span> ↓</span></span>
+<span class="line"><span>コンテナプロセス</span></span></code></pre>
+<h1 id="準備">準備</h1>
+<ol>
+<li>Apple Silicon を使っている場合は、現在のターミナルが Apple Silicon ネイティブで起動されていることを確認する。環境によっては、Rosettaが有効でx86_64でターミナルを起動している場合があるので注意する。
+<ul>
+<li><code>uname -m</code> の結果が <code>arm64</code> であることを確認する。</li>
+<li>結果が <code>x86_64</code> の場合は、現在のターミナルが Rosetta2 でエミュレートされたものになっているので、例えば、iTerm2 を使っているのなら、<code>iTerm2 > Settings > Profiles > Command</code> に <code>/bin/sh</code> などを指定して、ネイティブで実行されるようにする。</li>
+<li>または、<code>Activity Monitor > CPU > Kind</code> に <code>Apple</code> または <code>Intel</code> が表示さるので、実行中のターミナルがApple Siliconネイティブで実行されていれば <code>Apple</code> になる。</li>
+</ul>
+</li>
+<li><a href="https://brew.sh/">Homebrew</a>をインストールしておく。</li>
+</ol>
+<h1 id="colimaとdocker-daemonで使う方法">ColimaとDocker daemonで使う方法</h1>
+<ol>
+<li><a href="https://github.com/abiosoft/colima">Colima</a>をインストール
+<ul>
+<li><code>brew install colima</code></li>
+<li><code>colima start</code> でVMが作成され、dockerdがインストールされ、起動する
+<ul>
+<li><code>colima start --cpu 4 --memory 8</code></li>
+</ul>
+</li>
+<li><code>colima status</code></li>
+<li><code>colima list</code></li>
+<li><code>colima stop</code></li>
+</ul>
+</li>
+<li>Docker CLIをインストール
+<ul>
+<li><code>brew install docker docker-compose</code></li>
+</ul>
+</li>
+<li>コンテナが動作する
+<ul>
+<li><code>docker run hello-world</code></li>
+</ul>
+</li>
+</ol>
+<h1 id="podmanを使う方法">Podmanを使う方法</h1>
+<ol>
+<li>Podmanをインストール
+<ul>
+<li><code>brew install podman podman-compose</code></li>
+<li><code>podman --version</code></li>
+<li><code>podman machine init</code></li>
+<li><code>podman machine start</code> でVMが作成される</li>
+<li><code>podman info</code></li>
+</ul>
+</li>
+<li>コンテナが動作する
+<ul>
+<li><code>podman run hello-world</code></li>
+</ul>
+</li>
+<li>Docker Hubのimageも使える
+<ul>
+<li><code>podman run -d --name nginx -p 80:80 --network pasta docker.io/library/nginx</code>
+<ul>
+<li>Podmanはnetworkに<a href="https://passt.top/passt/about/">passt(pasta)</a>が使える。passtを使うと、コンテナ内のネットワークで完結させるのではなく、ホスト側のユーザ空間にネットワークを晒すことが可能であり、コンテナネットワークのNATとのやりとりを介さず、ホスト側のネットワークと直接やりとりするようになる。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="podmanを使う理由">Podmanを使う理由</h1>
+<ul>
+<li>DockerもPodmanもrootlessで動作できるので、正しく使う分にはどちらも安全だが、ある側面ではPodmanが優位。
+<ul>
+<li>Podmanの場合はVM内にデーモンを持たないが、Dockerの場合はVM内にroot権限のdockerdデーモンを持つ。dockerdデーモンは<code>/var/run/docker.sock</code>を介してホストのCLIとやりとりしており、通常はVM内のコンテナにはマウントされないが、万が一コンテナにマウントした場合は、そのコンテナからdockerdを操作することが可能になるため、この視点だと、DockerよりもPodmanの方が安全性が高いということになる。</li>
+<li>rootで動作しているdockerdをrootlessで動作させることも可能だが、dockerdをrootで動作させてきた都合上、rootless化に伴うオーバーヘッドがある。</li>
+</ul>
+</li>
+<li><code>--priviledged</code> でコンテナを起動した場合は、PodmanであろうがDockerであろうが、コンテナにrootレベルでのカーネルのアクセスを許すため、VM内部のカーネル経由でのセキュリティーのリスクが生じる。</li>
+</ul>  </div> </article> <div id="mobile-share-sentinel" class="xl:hidden h-px"></div> <div id="mobile-share-anchor" class="xl:hidden hidden justify-center gap-4 py-4"> <a href="https://twitter.com/intent/tweet?text=macOS%E3%81%A7%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E5%8B%95%E4%BD%9C%E3%81%95%E3%81%9B%E3%82%8B%EF%BC%93%E3%81%A4%E3%81%AE%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3&amp;url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-black hover:text-white hover:border-black transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://b.hatena.ne.jp/entry/panel/?url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-[#00a4de] hover:text-white hover:border-[#00a4de] transition-colors font-bold text-xs">
+B!
+</a> <button aria-label="URLをコピー" class="copy-url-btn flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-muted transition-colors"> <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> <svg class="icon-check hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> </button> </div> <!-- 関連記事 --> <section class="mt-12 pt-10 border-t border-border"> <h2 class="text-base font-semibold mb-2"> <span class="lang-ja">関連記事</span> <span class="lang-en">Related Posts</span> </h2> <ul class="flex flex-col list-none p-0 m-0"> <li> <a href="/blog/container-for-macos" class="group flex flex-col gap-1 py-4 px-3 -mx-3 rounded-xl hover:bg-muted/50 transition-colors"> <div class="flex items-center gap-3 text-xs text-muted-foreground tabular-nums"> <time datetime="2026-06-07T00:00:00.000Z"> 2026/06/07 </time> </div> <p class="font-semibold text-base leading-snug truncate group-hover:underline underline-offset-4"> macOSでコンテナを動作させる３つのパターン </p> </a> </li><li> <a href="/blog/docker-network" class="group flex flex-col gap-1 py-4 px-3 -mx-3 rounded-xl hover:bg-muted/50 transition-colors"> <div class="flex items-center gap-3 text-xs text-muted-foreground tabular-nums"> <time datetime="2020-08-13T00:00:00.000Z"> 2020/08/13 </time> </div> <p class="font-semibold text-base leading-snug truncate group-hover:underline underline-offset-4"> Dockerコンテナのネットワーク構成はどうなっているのか </p> </a> </li><li> <a href="/blog/how-to-use-docker" class="group flex flex-col gap-1 py-4 px-3 -mx-3 rounded-xl hover:bg-muted/50 transition-colors"> <div class="flex items-center gap-3 text-xs text-muted-foreground tabular-nums"> <time datetime="2020-08-13T00:00:00.000Z"> 2020/08/13 </time> </div> <p class="font-semibold text-base leading-snug truncate group-hover:underline underline-offset-4"> Dockerコンテナのライフサイクル </p> </a> </li> </ul> </section> </div> <!-- 右: 追従する目次 (lg以上) --> <aside class="hidden lg:block w-56 shrink-0"> <div class="sticky top-24"> <nav aria-label="目次" id="toc-sidebar" class="text-sm"><p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#コンテナを動作させる３つのパターン" data-slug="コンテナを動作させる３つのパターン" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">コンテナを動作させる３つのパターン</a></li><li style="padding-left: 0.75rem"><a href="#docker-desktopのみのパターン" data-slug="docker-desktopのみのパターン" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Docker Desktopのみのパターン</a></li><li style="padding-left: 0.75rem"><a href="#colima-と-docker-daemon-を組み合わせるパターン" data-slug="colima-と-docker-daemon-を組み合わせるパターン" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Colima と Docker daemon を組み合わせるパターン</a></li><li style="padding-left: 0.75rem"><a href="#podmanのみのパターン" data-slug="podmanのみのパターン" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Podman　のみのパターン</a></li><li style="padding-left: 0rem"><a href="#準備" data-slug="準備" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">準備</a></li><li style="padding-left: 0rem"><a href="#colimaとdocker-daemonで使う方法" data-slug="colimaとdocker-daemonで使う方法" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">ColimaとDocker daemonで使う方法</a></li><li style="padding-left: 0rem"><a href="#podmanを使う方法" data-slug="podmanを使う方法" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Podmanを使う方法</a></li><li style="padding-left: 0rem"><a href="#podmanを使う理由" data-slug="podmanを使う理由" class="toc-entry toc-link block py-0.5 text-muted-foreground hover:text-foreground transition-colors leading-snug">Podmanを使う理由</a></li></ol></nav>
+
+  <script type="module">const n=document.getElementById("toc-sidebar");if(n){const o=n.querySelectorAll(".toc-link"),i=t=>{o.forEach(e=>{const s=e.dataset.slug===t;e.classList.toggle("text-foreground",s),e.classList.toggle("font-medium",s),e.classList.toggle("text-muted-foreground",!s)})},r=[...o].map(t=>document.getElementById(t.dataset.slug)).filter(t=>t!==null),c=new IntersectionObserver(t=>{const e=t.filter(s=>s.isIntersecting);e.length>0&&i(e[0].target.id)},{rootMargin:"-80px 0px -60% 0px"});r.forEach(t=>c.observe(t))}</script><script type="module">if(!document.documentElement.dataset.tocBilingualReady){let a=function(){const e=document.documentElement.dataset.lang??"ja";document.querySelectorAll("a.toc-entry[data-lang-ja]").forEach(t=>{t.textContent=e==="en"?t.dataset.langEn??"":t.dataset.langJa??""})},l=function(){document.querySelectorAll("a.toc-entry[data-slug]").forEach(e=>{const t=document.getElementById(e.dataset.slug);if(!t)return;const n=t.querySelector(".lang-ja"),o=t.querySelector(".lang-en");n&&o&&(e.dataset.langJa=n.textContent??"",e.dataset.langEn=o.textContent??"")}),a()};document.documentElement.dataset.tocBilingualReady="1",l(),new MutationObserver(a).observe(document.documentElement,{attributes:!0,attributeFilter:["data-lang"]})}</script> </div> </aside> </div> </div> </main>  <aside id="pc-share-aside" class="hidden xl:flex fixed flex-col items-center gap-3 z-10" style="left: max(8px, calc(50vw - 584px)); top: 0px;"> <a href="https://twitter.com/intent/tweet?text=macOS%E3%81%A7%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E5%8B%95%E4%BD%9C%E3%81%95%E3%81%9B%E3%82%8B%EF%BC%93%E3%81%A4%E3%81%AE%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3&amp;url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-muted-foreground hover:bg-black hover:text-white hover:border-black transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="Facebookでシェア" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-muted-foreground hover:bg-[#1877f2] hover:text-white hover:border-[#1877f2] transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg> </a> <a href="https://b.hatena.ne.jp/entry/panel/?url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-muted-foreground hover:bg-[#00a4de] hover:text-white hover:border-[#00a4de] transition-colors font-bold text-xs">
+B!
+</a> <button aria-label="URLをコピー" class="copy-url-btn flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-muted-foreground hover:text-foreground transition-colors"> <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> <svg class="icon-check hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> </button> </aside>  <div id="mobile-share-bar" class="xl:hidden fixed bottom-0 left-0 right-0 z-40 transition-transform duration-300 ease-in-out" style="transform: translateY(100%)"> <div class="px-6 pt-3 pb-8 flex items-center justify-center gap-4"> <a href="https://twitter.com/intent/tweet?text=macOS%E3%81%A7%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E5%8B%95%E4%BD%9C%E3%81%95%E3%81%9B%E3%82%8B%EF%BC%93%E3%81%A4%E3%81%AE%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3&amp;url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-black hover:text-white hover:border-black transition-colors"> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"></path></svg> </a> <a href="https://b.hatena.ne.jp/entry/panel/?url=https%3A%2F%2Fyasakura.me%2Fblog%2Fcontainer-for-macos%2F" target="_blank" rel="noopener noreferrer" aria-label="はてなブックマークに追加" class="flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-[#00a4de] hover:text-white hover:border-[#00a4de] transition-colors font-bold text-xs">
+B!
+</a> <button aria-label="URLをコピー" class="copy-url-btn flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background text-foreground hover:bg-muted transition-colors"> <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> <svg class="icon-check hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> </button> </div> </div> <script>
+    (function () {
+      var bar      = document.getElementById('mobile-share-bar');
+      var anchor   = document.getElementById('mobile-share-anchor');
+      var sentinel = document.getElementById('mobile-share-sentinel');
+      if (!bar || !anchor || !sentinel) return;
+
+      var lastY  = window.scrollY;
+      var accum  = 0;
+      var DELTA  = 60; // この px 分スクロールしてから表示・非表示を切り替える
+      var atEnd  = false;
+
+      function showBar() { bar.style.transform = 'translateY(0)'; }
+      function hideBar() { bar.style.transform = 'translateY(100%)'; }
+
+      // ページ読み込み直後に表示
+      showBar();
+
+      var observer = new IntersectionObserver(function (entries) {
+        atEnd = entries[0].isIntersecting;
+        if (atEnd) {
+          hideBar();
+          anchor.classList.remove('hidden');
+          anchor.classList.add('flex');
+        } else {
+          anchor.classList.add('hidden');
+          anchor.classList.remove('flex');
+        }
+      }, { threshold: 0 });
+      observer.observe(sentinel);
+
+      window.addEventListener('scroll', function () {
+        if (atEnd) { accum = 0; lastY = window.scrollY; return; }
+        var currentY = window.scrollY;
+        var delta    = currentY - lastY;
+        lastY = currentY;
+
+        // 方向が変わったら蓄積リセット
+        if ((delta > 0 && accum < 0) || (delta < 0 && accum > 0)) accum = 0;
+        accum += delta;
+
+        if (accum > DELTA) {
+          showBar(); // 下に DELTA px スクロール → 表示
+          accum = DELTA;
+        } else if (accum < -DELTA) {
+          hideBar(); // 上に DELTA px スクロール → 非表示
+          accum = -DELTA;
+        }
+      }, { passive: true });
+    })();
+  </script> <script>
+    (function () {
+      var aside   = document.getElementById('pc-share-aside');
+      var article = document.getElementById('article-body');
+      if (!aside || !article) return;
+      var STICKY_TOP = 96; // top-24 = 6rem
+
+      function update() {
+        var top = Math.max(article.getBoundingClientRect().top, STICKY_TOP);
+        aside.style.top = top + 'px';
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>   <button id="toc-toggle" aria-label="目次を開く" class="lg:hidden fixed top-[4.5rem] right-4 z-40 flex items-center gap-1.5 bg-background border border-border rounded-full px-3 py-1.5 text-xs font-medium shadow-sm hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="15" y2="12"></line><line x1="3" y1="18" x2="9" y2="18"></line> </svg> <span class="lang-ja">目次</span> <span class="lang-en">Contents</span> </button>  <div id="toc-drawer" class="lg:hidden fixed inset-0 z-50 invisible opacity-0 transition-all duration-200"> <!-- オーバーレイ --> <div id="toc-overlay" class="absolute inset-0 bg-black/40"></div> <!-- パネル --> <div id="toc-panel" class="absolute right-0 top-0 h-full w-72 max-w-[85vw] bg-background shadow-xl translate-x-full transition-transform duration-200 overflow-y-auto"> <div class="flex items-center justify-between px-5 py-4 border-b border-border"> <button id="toc-close" aria-label="閉じる" class="p-1 rounded hover:bg-muted transition-colors"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line> </svg> </button> </div> <div class="px-5 py-4"> <nav aria-label="目次" class="rounded-lg border border-border bg-muted/40 px-6 py-5 mb-10 text-sm"><p class="font-semibold mb-3 text-foreground"><span class="lang-ja">目次</span><span class="lang-en">Contents</span></p><ol class="space-y-1.5 list-none m-0 p-0"><li style="padding-left: 0rem"><a href="#コンテナを動作させる３つのパターン" data-slug="コンテナを動作させる３つのパターン" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">コンテナを動作させる３つのパターン</a></li><li style="padding-left: 1rem"><a href="#docker-desktopのみのパターン" data-slug="docker-desktopのみのパターン" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Docker Desktopのみのパターン</a></li><li style="padding-left: 1rem"><a href="#colima-と-docker-daemon-を組み合わせるパターン" data-slug="colima-と-docker-daemon-を組み合わせるパターン" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Colima と Docker daemon を組み合わせるパターン</a></li><li style="padding-left: 1rem"><a href="#podmanのみのパターン" data-slug="podmanのみのパターン" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Podman　のみのパターン</a></li><li style="padding-left: 0rem"><a href="#準備" data-slug="準備" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">準備</a></li><li style="padding-left: 0rem"><a href="#colimaとdocker-daemonで使う方法" data-slug="colimaとdocker-daemonで使う方法" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">ColimaとDocker daemonで使う方法</a></li><li style="padding-left: 0rem"><a href="#podmanを使う方法" data-slug="podmanを使う方法" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Podmanを使う方法</a></li><li style="padding-left: 0rem"><a href="#podmanを使う理由" data-slug="podmanを使う理由" class="toc-entry text-muted-foreground hover:text-foreground transition-colors leading-relaxed">Podmanを使う理由</a></li></ol></nav> </div> </div> </div> <script>
+        var btn    = document.getElementById('toc-toggle');
+        var drawer = document.getElementById('toc-drawer');
+        var panel  = document.getElementById('toc-panel');
+        var overlay = document.getElementById('toc-overlay');
+        var close  = document.getElementById('toc-close');
+
+        function openDrawer() {
+          drawer.classList.remove('invisible', 'opacity-0');
+          setTimeout(function() { panel.classList.remove('translate-x-full'); }, 10);
+        }
+        function closeDrawer() {
+          panel.classList.add('translate-x-full');
+          drawer.classList.add('opacity-0');
+          setTimeout(function() { drawer.classList.add('invisible'); }, 200);
+        }
+
+        btn.addEventListener('click', openDrawer);
+        close.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // 目次リンクをタップしたら閉じる
+        drawer.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', closeDrawer);
+        });
+      </script> <script>
+    document.querySelectorAll('.copy-url-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(location.href).then(function () {
+          var copy  = btn.querySelector('.icon-copy');
+          var check = btn.querySelector('.icon-check');
+          copy.classList.add('hidden');
+          check.classList.remove('hidden');
+          setTimeout(function () {
+            copy.classList.remove('hidden');
+            check.classList.add('hidden');
+          }, 2000);
+        });
+      });
+    });
+  </script> <footer class="border-t border-border mt-20"> <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"> <p>&copy; 2026 yasakura. All rights reserved.</p> <nav aria-label="フッターナビゲーション"> <ul class="flex items-center gap-6 list-none m-0 p-0"> <li> <a href="/site-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">サイトポリシー</span> <span class="lang-en">Site Policy</span> </a> </li> <li> <a href="/privacy-policy" class="hover:text-foreground transition-colors"> <span class="lang-ja">プライバシーポリシー</span> <span class="lang-en">Privacy Policy</span> </a> </li> </ul> </nav> </div> </footer>  <div id="search-modal" class="fixed inset-0 z-[60] invisible opacity-0 transition-all duration-150"> <div class="absolute inset-0 bg-black/50"></div> <div class="relative z-10 max-w-xl mx-auto mt-24 px-4"> <div class="bg-background rounded-xl shadow-2xl border border-border overflow-hidden"> <div class="flex items-center gap-3 px-4 py-3 border-b border-border"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground"> <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path> </svg> <input id="search-input" type="text" placeholder="記事を検索..." data-placeholder-ja="記事を検索..." data-placeholder-en="Search articles..." autocomplete="off" class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"> <kbd class="hidden sm:inline-flex text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">Esc</kbd> </div> <ul id="search-results" class="max-h-80 overflow-y-auto py-2 list-none m-0 p-0"></ul> <p id="search-empty" class="hidden text-sm text-muted-foreground text-center py-8"> <span class="lang-ja">記事が見つかりませんでした</span> <span class="lang-en">No articles found</span> </p> </div> </div> </div> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.BR7VHDYB.js"></script> </body></html>
